@@ -1,4 +1,5 @@
-<div th:fragment="footer" class="h-11 w-full justify-end" >
+<th:block th:fragment="footer">
+<div class="h-11 w-full justify-end" >
   <footer class="footer p-10 bg-neutral text-neutral-content">
     <nav>
       <header class="footer-title">Services</header> 
@@ -22,3 +23,6 @@
     </nav>
   </footer>
 </div>
+
+<th:block th:replace="~{components/nav-cart-shop :: nav-cart-component}" ></th:block>
+</th:block>

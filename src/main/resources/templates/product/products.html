@@ -8,15 +8,14 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.7/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <th:block th:insert="~{layout/head :: react-cdn}" ></th:block>
 </head>
 
 <body>
-
-    <div class="h-screen flex flex-col justify-between">
+    <div id="root" class="h-screen flex flex-col justify-between">
         <div>
-            <div th:replace="layout/root :: root"></div>
+            <div th:replace="~{layout/root :: root}"></div>
             <div class="flex flex-col px-6 gap-3">
-
 
                 <section class="py-2 flex flex-col gap-2">
                     <div class="flex flex-col w-full border-opacity-50">
@@ -48,33 +47,58 @@
 
                     <div class="flex flex-wrap gap-4">
 
-                        <div class="card w-80 bg-base-100 shadow-xl">
-                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-                                    alt="Shoes" /></figure>
+                        <div th:each="product : ${pagination.data}" class="card w-60 bg-base-100 shadow-xl">
+                            <figure class="h-32"><img th:src="${product.img}" alt="Shoes" /></figure>
                             <div class="card-body">
-                                <h2 class="card-title">
-                                    Shoes!
-                                    <div class="badge badge-secondary">NEW</div>
-                                </h2>
-                                <p>If a dog chews shoes whose shoes does he choose?</p>
-                                <div class="card-actions justify-end">
-                                    <div class="badge badge-outline">Fashion</div>
-                                    <div class="badge badge-outline">Products</div>
+
+                                <p th:text="${product.name}">If a dog chews shoes whose shoes </p>
+                                <div th:if="${product.detail != null}">
+                                    <div class="card-actions justify-end">
+                                        <div class="badge badge-outline">Fashion</div>
+                                        <div class="badge badge-outline">Products</div>
+                                    </div>
                                 </div>
+                                <div th:if="${product.detail == null}">
+                                    <div class="card-actions justify-end">
+                                        no
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="flex p-2 gap-2">
+                                <button
+                                th:attr="onclick=${'addToCart(
+                                    {id:'+product.id+',img:'''+product.img+''''+',name:'''+product.name+''',price:'+product.price+'})'}"
+                                
+                                class="btn btn-sm btn-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+
+                                </button>
+                                <a th:href="@{/product/{id}(id=${product.id})}" class="btn btn-sm btn-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                                        <path
+                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                                    </svg>Ver
+                                </a>
                             </div>
                         </div>
                     </div>
 
                 </section>
-
-
             </div>
-   <div th:replace="layout/pagination ::pagination" ></div>
+            <div th:replace="~{layout/pagination ::pagination}"></div>
         </div>
-        <div th:replace="layout/footer :: footer">
-
+        <div th:replace="~{layout/footer :: footer}">
         </div>
     </div>
+
+  
 </body>
 
 </html>

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  *
@@ -52,9 +53,11 @@ public class SalesController {
     }
 
     @PostMapping
-    public Sales save(@RequestBody Sales sale) {
+    public RedirectView save(@RequestBody Sales sale) {
 
-        return service.save(sale);
+        service.save(sale);
+
+        return new RedirectView("/product/search");
 
     }
 

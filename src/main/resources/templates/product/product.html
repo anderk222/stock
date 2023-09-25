@@ -8,28 +8,67 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.7/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <th:block th:insert="~{layout/head :: react-cdn}" ></th:block>
 </head>
 
 <body>
     <div class="h-screen flex flex-col justify-between">
         <div>
-            <div th:replace="layout/root :: root"></div>
+            <div th:replace="~{layout/root :: root}"></div>
             <div class="flex flex-col px-6 gap-3">
-             <!-- Content -->
+                <!-- Content -->
 
                 <section class="py-2 flex flex-col gap-2">
-                    
-                    <div class="flex flex-col w-full border-opacity-50">
-                        <div class="divider ">
-                            <h1 class="text-xl text-center">Productos</h1>
-                        </div>
-                    </div>
 
+                    <form action="#" th:action="@{/product/buy}" method="post" th:object="${shop}">
+                        <input hidden th:field="*{person}" />
+                        <input hidden th:field="*{product}" />
+                        <article class="flex gap-4">
+                            <figure>
+                                <img class="w-96" th:src="${product.img}" />
+                            </figure>
+
+
+                            <div class="flex flex-col w-full">
+
+                                <h2 class="font-bold text-3xl" th:text="${product.name}">Product Name</h2>
+                                <p th:text="${product.name}"></p>
+                                <div class="divider"></div>
+                                <p th:text="${product.price}"></p>
+                                <p class="text-bold text-black"> Stock: <span th:text="${product.stock}"></span></p>
+
+                                <div class="flex gap-2 w-full justify-end">
+                                    
+                                    <div class="flex gap-4 items-center" >
+                                    <span class="text font-bold" >Catindad :</span>
+                                        <input class="w-36 bg-slate-50 p-2" type="number" th:field="*{count}" />
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-success">
+       
+                                        
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
+                                            <path
+                                                d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z" />
+                                        </svg> Comprar</button>
+                                    <button type="button" class="btn btn-success btn-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        Aniadir al carrito
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
+
+                    </form>
                 </section>
             </div>
 
         </div>
-        <div th:replace="layout/footer :: footer">
+        <div th:replace="~{layout/footer :: footer}">
 
         </div>
     </div>

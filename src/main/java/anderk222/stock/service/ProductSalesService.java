@@ -6,13 +6,18 @@ package anderk222.stock.service;
 
 import anderk222.stock.exception.ResourceNotFoundException;
 import anderk222.stock.model.Product;
+import anderk222.stock.model.ProductProjection;
 import anderk222.stock.model.ProductSales;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import anderk222.stock.repository.ProductSalesRepository;
+import anderk222.stock.util.ProductSalesSortByCount;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  *
@@ -98,5 +103,32 @@ public class ProductSalesService {
 
         return productSale;
 
+    }
+
+    public List<ProductProjection> sellest(){
+
+        List<ProductSales> productSales = repository.findAll();
+
+        List<ProductSales> odered = new ArrayList<>();
+
+        for( ProductSales ps : productSales ){
+            
+            int idx = IntStream.range(0, odered.size())
+            .filter((i)-> odered.get(i).getProduct().getId().equals(ps.getProduct().getId()))
+            .findFirst().orElse(-1);
+
+            if(idx < 0) {odered.add(ps); continue;}
+            
+            ProductSales _found = odered.get(idx);
+
+            _found.setCount( _found.getCount()+ps.getCount());
+        }
+        
+        odered.sort(new ProductSalesSortByCount());
+
+        int to_idx = odered.size() > 5 ? 4 : odered.size();
+
+
+        return odered.subList(0, to_idx).stream().map(ProductProjection::new).toList();
     }
 }

@@ -2,23 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package anderk222.stock.model;
+package anderk222.stock.form;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  *
  * @author tanki
  */
-@Entity
 @Data
-@AllArgsConstructor
-public class Person {
+public class PersonForm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +25,7 @@ public class Person {
     private String dni;
     private String email;
 
-    public Person(long id){
+    public PersonForm(long id){
 
         this.id = id;
 

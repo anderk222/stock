@@ -2,111 +2,79 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.7/dist/full.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.7/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <th:block th:insert="~{layout/head :: react-cdn}"></th:block>
 </head>
-
 <body>
-
-    <div class="h-screen flex flex-col justify-between">
-        <div>
-            <div th:replace="layout/root :: root"></div>
-            <div class="flex flex-col px-6 gap-3">
-                <div class="carousel w-full">
-                    <div id="item1" class="carousel-item w-full">
-                        <img src="https://daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.jpg"
-                            class="w-full" />
-                    </div>
-                    <div id="item2" class="carousel-item w-full">
-                        <img src="https://daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.jpg"
-                            class="w-full" />
-                    </div>
-                    <div id="item3" class="carousel-item w-full">
-                        <img src="https://daisyui.com/images/stock/photo-1414694762283-acccc27bca85.jpg"
-                            class="w-full" />
-                    </div>
-                    <div id="item4" class="carousel-item w-full">
-                        <img src="https://daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.jpg"
-                            class="w-full" />
-                    </div>
-                </div>
-                <div class="flex justify-center w-full py-2 gap-2">
-                    <a href="#item1" class="btn btn-xs">1</a>
-                    <a href="#item2" class="btn btn-xs">2</a>
-                    <a href="#item3" class="btn btn-xs">3</a>
-                    <a href="#item4" class="btn btn-xs">4</a>
-                </div>
-                <section class="py-2 flex flex-col gap-2">
-                    <div class="flex flex-col w-full border-opacity-50">
-                        <div class="divider "><h1 class="text-xl text-center" >Productos</h1></div>
-                      </div>
-                    
-                    <section class="flex gap-2 flex-col" >
-                        <h2>Mas Vendidos</h2>
-                    <div class="flex flex-wrap gap-4" >
-
-                        <div class="card w-80 bg-base-100 shadow-xl image-full">
-                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
-                            <div class="card-body">
-                              <h2 class="card-title">Shoes!</h2>
-                              <p>If a dog chews shoes whose shoes does he choose?</p>
-                              <div class="card-actions justify-end">
-                                <button class="btn btn-primary btn-md">Buy Now</button>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card w-80 bg-base-100 shadow-xl image-full">
-                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
-                            <div class="card-body">
-                              <h2 class="card-title">Shoes!</h2>
-                              <p>If a dog chews shoes whose shoes does he choose?</p>
-                              <div class="card-actions justify-end">
-                                <button class="btn btn-primary btn-md">Buy Now</button>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card w-80 bg-base-100 shadow-xl image-full">
-                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
-                            <div class="card-body">
-                              <h2 class="card-title">Shoes!</h2>
-                              <p>If a dog chews shoes whose shoes does he choose?</p>
-                              <div class="card-actions justify-end">
-                                <button class="btn btn-primary btn-md">Buy Now</button>
-                              </div>
-                            </div>
-                          </div>
-                    </div>
-                </section>
-
-                <section class="flex gap-2 flex-col" >
-                    <h2>Otros</h2>
-                <div class="flex flex-wrap gap-2" >
-
-                    <div class="card w-80 bg-base-100 shadow-xl image-full">
-                        <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
-                        <div class="card-body">
-                          <h2 class="card-title">Shoes!</h2>
-                          <p>If a dog chews shoes whose shoes does he choose?</p>
-                          <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-md">Buy Now</button>
-                          </div>
-                        </div>
-                      </div>
-                </div>
-            </section>
-
-                </section>
+  <div class="h-screen flex flex-col justify-between">
+    <div>
+      <div th:replace="~{layout/root :: root}"></div>
+      <div class="flex flex-col px-6 gap-3">
+        <div class="carousel h-96 w-full">
+          <div th:each="product,stat : ${sellest}" th:id="${'item'+stat.index}" class="carousel-item w-full">
+            <img th:src="${product.img}" class="w-full" />
+          </div>
+        </div>
+        <div class="flex justify-center w-full py-2 gap-2">
+          <a href="#item1" class="btn btn-xs">1</a>
+          <a href="#item2" class="btn btn-xs">2</a>
+          <a href="#item3" class="btn btn-xs">3</a>
+          <a href="#item4" class="btn btn-xs">4</a>
+        </div>
+        <section class="py-2 flex flex-col gap-2">
+          <div class="flex flex-col w-full border-opacity-50">
+            <div class="divider ">
+              <h1 class="text-xl text-center">Productos</h1>
             </div>
+          </div>
 
-        </div>
-        <div th:replace="layout/footer :: footer">
+          <section class="flex gap-2 flex-col">
+            <h2>Mas Vendidos</h2>
+            <div class="flex flex-wrap gap-4">
+              <div th:each="product : ${sellest}" class="card w-80  h-64 bg-base-100 shadow-xl image-full">
+                <figure><img th:src="${product.img}" alt="Shoes" />
+                </figure>
+                <div class="card-body">
+                  <h2 class="card-title" th:text="${product.name}" >Shoes!</h2>
+                  <div class="card-actions justify-end">
+                    <a th:href="@{/product/{id}(id=${product.id})}" class="btn btn-primary btn-md">Buy Now</a>
+                  </div> 
+                </div>
+              </div>
+            </div>
+          </section>
 
-        </div>
+          <section class="flex gap-2 flex-col">
+            <h2>Otros</h2>
+            <div class="flex flex-wrap gap-2">
+
+              <div class="card w-80 bg-base-100 shadow-xl image-full">
+                <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" />
+                </figure>
+                <div class="card-body">
+                  <h2 class="card-title">Shoes!</h2>
+                  <p>If a dog chews shoes whose shoes does he choose?</p>
+                  <div class="card-actions justify-end">
+                    <button class="btn btn-primary btn-md">Buy Now</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </section>
+      </div>
+
     </div>
+    <div th:replace="~{layout/footer :: footer}">
+
+    </div>
+  </div>
 
 </body>
 

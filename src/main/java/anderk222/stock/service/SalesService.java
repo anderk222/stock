@@ -5,7 +5,9 @@
 package anderk222.stock.service;
 
 import anderk222.stock.exception.ResourceNotFoundException;
+import anderk222.stock.form.ShoppingForm;
 import anderk222.stock.model.Pagination;
+import anderk222.stock.model.Person;
 import anderk222.stock.model.Product;
 import anderk222.stock.model.ProductSales;
 import anderk222.stock.model.Sales;
@@ -68,6 +70,18 @@ public class SalesService {
 
         return res;
 
+    }
+
+    public Sales buy(ShoppingForm shoppingForm){
+
+        Sales sale = repository.save(new Sales());
+
+        sale.addProduct(new Product(shoppingForm.getProduct()), shoppingForm.getCount());
+
+        sale.setPerson(new Person(shoppingForm.getPerson()));
+
+
+        return repository.save(sale);
     }
 
     public Sales save(Sales sale) {

@@ -23,6 +23,8 @@ public class Pagination<T> {
     int totalPages;
     Collection<T> data;
     long totaltems;
+    int next;
+    int previous; 
 
     public Pagination(int page, int limit, Collection<T> data) {
         this.page = page;

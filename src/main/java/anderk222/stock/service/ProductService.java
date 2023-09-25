@@ -8,6 +8,7 @@ import anderk222.stock.exception.ResourceNotFoundException;
 import anderk222.stock.model.Pagination;
 import anderk222.stock.model.Product;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,8 +25,10 @@ import jakarta.transaction.Transactional;
 @Service
 public class ProductService {
 
+
     @Autowired
     private ProductRepository repository;
+
 
     public Pagination<Product> search(int page, int size, String value) {
 
@@ -35,6 +38,8 @@ public class ProductService {
                 .findByNameContainingIgnoreCase(value, pageable);
 
         Pagination<Product> res = new Pagination<>(page, size, data.getContent());
+        res.setNext(pageable.next().getPageNumber());
+        res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
 
         res.setTotalPages(data.getTotalPages());
         res.setTotaltems(data.getTotalElements());
@@ -54,7 +59,7 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Product> data = repository
-                .findByProductDetailProviderId(id,pageable);
+                .findByDetailProviderId(id,pageable);
 
         Pagination<Product> res = new Pagination<>(page, size, data.getContent());
 
@@ -70,7 +75,7 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Product> data = repository
-                .findByProductDetailCategoryId(id,pageable);
+                .findByDetailCategoryId(id,pageable);
 
         Pagination<Product> res = new Pagination<>(page, size, data.getContent());
 
@@ -103,7 +108,8 @@ public class ProductService {
         repository.deleteById(id);
 
         return product;
-
     }
+
+
 
 }

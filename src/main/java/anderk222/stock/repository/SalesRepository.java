@@ -22,6 +22,6 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
     
     @Query(value ="SELECT sales.id as id, sales.invoice as invoice, person FROM Sales as sales JOIN Person as person on person.id=sales.customer WHERE person.id=:person"
     , nativeQuery = true)
-    Page<SalesProjection> findByPersonId(@Param("person") long person, Pageable pageable);
-    
+    Page<SalesProjection> findByPersonId(@Param("person") long person, Pageable pageable);    
+   
 }

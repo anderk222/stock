@@ -4,9 +4,7 @@
  */
 package anderk222.stock.model;
 
-import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +17,7 @@ import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -31,23 +30,33 @@ import org.hibernate.annotations.OnDeleteAction;
 @Data
 public class Sales {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private long id;
-    @Column(name = "invoice")
-    private String invoice;
-    @JoinColumn(name = "customer", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Person person;
-    
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, 
-            mappedBy = "sales", fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<ProductSales> productSalesList = new ArrayList<>();
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private long id;
+        private String invoice;
 
-    @Transient
-    private BigDecimal total=BigDecimal.ZERO;
-    
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "person_id")
+        @OnDelete(action = OnDeleteAction.CASCADE)
+        private Person person;
+
+        @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "sales", fetch = FetchType.LAZY)
+        @OnDelete(action = OnDeleteAction.CASCADE)
+        private List<ProductSales> productSalesList = new ArrayList<>();
+
+        @Transient
+        private BigDecimal total = BigDecimal.ZERO;
+
+        public void addProduct(Product product,int count ) {
+
+                ProductSales productSales = new ProductSales();
+
+                productSales.setSales(this); 
+
+                productSales.setProduct(product);
+
+                this.productSalesList.add(productSales);
+
+        }
+
 }

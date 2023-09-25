@@ -13,7 +13,7 @@
 <body>
     <div class="h-screen flex flex-col justify-between">
         <div>
-            <div th:replace="layout/root :: root"></div>
+            <div th:replace="~{layout/root :: root}"></div>
             <div class="flex flex-col px-6 gap-3">
              <!-- Content -->
 
@@ -29,7 +29,7 @@
             </div>
 
         </div>
-        <div th:replace="layout/footer :: footer">
+        <div th:replace="~{layout/footer :: footer}">
 
         </div>
     </div>
