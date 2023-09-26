@@ -20,8 +20,8 @@ import anderk222.stock.model.SalesProjection;
 public interface SalesRepository extends JpaRepository<Sales, Long> { 
 
     
-    @Query(value ="SELECT sales.id as id, sales.invoice as invoice, person FROM Sales as sales JOIN Person as person on person.id=sales.customer WHERE person.id=:person"
+    @Query(value ="SELECT sales.*, person.id as id_person,person.names,person.lastnames FROM Sales as sales JOIN Person as person on person.id=sales.person_id WHERE person.id=:person"
     , nativeQuery = true)
     Page<SalesProjection> findByPersonId(@Param("person") long person, Pageable pageable);    
    
-}
+} 

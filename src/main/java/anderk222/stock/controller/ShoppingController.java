@@ -52,12 +52,12 @@ public class ShoppingController {
 
     }
 
-    @GetMapping("/shop-car")
+    @GetMapping("/shop-cart")
     public String shopCar(Model model){
 
         model.addAttribute("sale",new Sales());
 
-        return "shopping/shop-car";
+        return "shopping/shop-cart";
     }
 
     @PostMapping
@@ -84,4 +84,31 @@ public class ShoppingController {
         return service.delete(id);
 
     }
+
+    @GetMapping("/purchases/{person}")
+    public String purchases(
+        Model model, 
+        @RequestParam( name = "page", defaultValue="0", required=false ) int page,
+        @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+        @PathVariable long person){
+
+        Pagination<SalesProjection> data = service.findByPersonId(person, page, size);
+
+        model.addAttribute("pagination", data);
+
+        return "shopping/purchases";
+
+    }
+
+    @GetMapping("/purchase/{id}")
+    public String purchase(Model model,@PathVariable long id){
+
+        Sales data = service.findByid(id);
+        
+        model.addAttribute("purchase", data);
+
+        return "shopping/purchase";
+        
+    }
+
 }

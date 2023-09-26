@@ -15,7 +15,7 @@
   <div class="h-screen flex flex-col justify-between">
     <div>
       <div th:replace="~{layout/root :: root}"></div>
-      <div id="shop-car" class="flex flex-col px-6 gap-3">
+      <div id="shop-cart" class="flex flex-col px-6 gap-3">
 
         <!-- Content -->
 
@@ -49,7 +49,7 @@
         </section>);
     }
 
-    const cart_section_root = ReactDOM.createRoot(document.getElementById("shop-car"));
+    const cart_section_root = ReactDOM.createRoot(document.getElementById("shop-cart"));
 
     cart_section_root.render(<CartSection />);
 
@@ -60,12 +60,19 @@
 
   <script th:fragment="nav-cart-component" type="text/babel" data-presets="react,stage-3">
 
+    const STATUS = {
+      LOAD: 'LOAD',
+      SUDMITING: 'SUBMITING',
+      OK: 'OK'
+    }
+
 
     const Items = () => {
 
       const [total, setTotal] = useState();
-
       const [items, setItems] = useState([]);
+
+      const [status, setStatus] = useState(STATUS.OK);
 
       useEffect(() => {
 
@@ -75,20 +82,15 @@
 
         let items_storage = JSON.parse(str);
 
-        let total = 0;
-
-        for (item of items_storage) total += item.total;
-
-        console.log(total);
-
         setItems(items_storage);
 
-        setTotal(total);
+        setTotal(getTotal(items_storage));
 
 
       }, [])
 
-      return (<table className="table">
+      return (
+        <table className="table">
         <thead>
           <tr>
             <th>
@@ -105,7 +107,11 @@
         </thead>
         <tbody>
 
-          {items.map((v, i) => <Item key={i} product={v} handleDelete={function(){handleDelete(v.id)}} />)}
+          {items.map((v, i) => <Item
+            key={i} product={v}
+            handleDelete={function () { handleDelete(v.id) }}
+            index={i}
+            handleCount={handleCount} />)}
 
         </tbody>
         <tfoot>
@@ -115,7 +121,13 @@
             <th></th>
             <th>Total Compra</th>
             <th>{total}</th>
-            <th><button className="btn btn-ghost btn-xs text-green-500">Comprar</button></th>
+            <th>
+              <button
+                onClick={handleBuy}
+                className="btn btn-ghost btn-xs text-green-500">
+                {status == STATUS.SUDMITING ? <span className="loading loading-spinner text-success"></span> : 'Comprar'
+                }</button>
+            </th>
           </tr>
         </tfoot>
 
@@ -124,20 +136,80 @@
 
       function handleDelete(id) {
 
-
         setItems(function (i) {
 
           let items = i.filter(v => v.id != id);
 
-          localStorage.setItem("shop-car", JSON.stringify(items))
+          localStorage.setItem("shop-cart", JSON.stringify(items))
 
-          setItems([...items])
+          setTotal(getTotal(items))
 
-          document.dispatchEvent(new Event('storage'));
+          window.dispatchEvent(new Event('storage'));
+
+          return [...items]
+
+        });
+      }
+
+      function handleCount(idx, event) {
+
+        let value = parseInt(event.target.value);
+
+        setItems(t => {
+
+          let updated = items;
+
+          updated[idx].total = updated[idx].price * value;
+          updated[idx].count = value;
+
+          localStorage.setItem('shop-cart', JSON.stringify(updated))
+
+          setTotal(getTotal(updated))
+
+          window.dispatchEvent(new Event('storage'))
+
+          return [...updated]
 
         });
 
       }
+
+      function handleBuy() {
+
+        if (items.length == 0) return;
+
+        setStatus(STATUS.SUDMITING);
+
+        fetch('/sales/buy/cart/1', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(items)
+        }).then(res => {
+          if (res.status != 200) alert(res.statusText);
+          localStorage.setItem("shop-cart", "[]");
+          setItems([]);
+          setTotal(0);
+          setStatus(STATUS.OK)
+          window.dispatchEvent(new Event('storage'));
+
+
+        }).catch(err => {
+
+          alert(JSON.stringify(err));
+        })
+
+
+      }
+
+      function getTotal(items) {
+
+        let total = 0;
+
+        for (let item of items) total += item.total;
+
+        return total.toFixed(2);
+      }
+
     }
 
   </script>
@@ -145,7 +217,7 @@
   <!----------------------Item-------------------------->
 
   <script th:fragment="nav-cart-component" type="text/babel" data-presets="react,stage-3">
-    const Item = ({ product, handleDelete }) => {
+    const Item = ({ product, handleDelete, handleCount, index }) => {
       return (
         <tr>
           <th>
@@ -157,29 +229,34 @@
             <div className="flex items-center space-x-3">
               <div className="avatar">
                 <div className="mask mask-squircle w-12 h-12">
-                  <img src="/tailwind-css-component-profile-2@56w.png" alt="Avatar Tailwind CSS Component" />
+                  <img src={product.img} alt={'Image ' + product.name} />
                 </div>
               </div>
               <div>
-                <div className="font-bold">{product.name}</div>
+                <div className="font-bold">
+                  <a className="cursor-pointer hover:text-gray-700" href={'/product/' + product.id} >{product.name}</a>
+                </div>
                 <div className="text-sm opacity-50">United States</div>
               </div>
             </div>
           </td>
           <td>
-            {product.count}
+            <input
+              className="outline:none w-12"
+              type='number'
+              onChange={function (e) { handleCount(index, e) }}
+              value={product.count} />
           </td>
           <td>{product.price}</td>
           <td>{product.total}</td>
           <th>
-            <button onClick={handleDelete} className="btn btn-ghost btn-xs text-red-500">Eliminar</button>
+            <button
+              onClick={handleDelete} className="btn btn-ghost btn-xs text-red-500">Eliminar</button>
           </th>
         </tr>
       )
     }
-
   </script>
-
 </body>
- 
+
 </html>

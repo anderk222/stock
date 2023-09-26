@@ -17,7 +17,7 @@
             <div th:replace="~{layout/root :: root}"></div>
             <div class="flex flex-col px-6 gap-3">
 
-                <section class="py-2 flex flex-col gap-2">
+                <section class="py-2 flex flex-col gap-2 ">
                     <div class="flex flex-col w-full border-opacity-50">
 
                         <div class="divider ">
@@ -45,7 +45,7 @@
                         </ul>
                     </div>
 
-                    <div class="flex flex-wrap gap-4">
+                    <div class="flex flex-wrap  gap-4">
 
                         <div th:each="product : ${pagination.data}" class="card w-60 bg-base-100 shadow-xl">
                             <figure class="h-32"><img th:src="${product.img}" alt="Shoes" /></figure>

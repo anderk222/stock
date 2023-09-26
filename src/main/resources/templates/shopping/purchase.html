@@ -21,9 +21,54 @@
                     
                     <div class="flex flex-col w-full border-opacity-50">
                         <div class="divider ">
-                            <h1 class="text-xl text-center">Productos</h1>
+                            <h1 class="text-xl text-center"><th:block th:text="${purchase.invoice}" ></th:block> </h1>
                         </div>
                     </div>
+                    <div class="overflow-x-auto">
+                        <table class="table  ">
+                          <!-- head -->
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Cantidad</th>
+                              <th>Precio Unitario</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <!-- row 1 -->
+                            <tr th:each="productSale : ${purchase.productSalesList}" >
+                              <td>
+                                <div class="flex items-center space-x-3">
+                                  <div class="avatar">
+                                    <div class="mask mask-squircle w-12 h-12">
+                                      <img th:src="${productSale.product.img}" th:alt="${productSale.product.img}" />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div class="font-bold" th:text="${productSale.product.name}" >Hart Hagerty</div>
+                                    <div class="text-sm opacity-50">United States</div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td th:text="${productSale.count}" >
+                                Zemlak, Daniel and Leannon
+                              </td>
+                              <td th:text="${productSale.product.price}">Purple</td>
+                          
+                            </tr>
+                        
+                          </tbody>
+                          <!-- foot -->
+                          <tfoot>
+                            <tr className="font-bold text-black"> 
+                              <th></th>
+                              <th>Total compra</th>
+                              <th th:text="${purchase.Total}" ></th>
+                            </tr>
+                          </tfoot>
+                          
+                        </table>
+                      </div>
 
                 </section>
             </div>

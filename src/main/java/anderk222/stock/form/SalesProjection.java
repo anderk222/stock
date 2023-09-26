@@ -11,13 +11,16 @@ import org.springframework.beans.factory.annotation.Value;
  * @author tanki
  */
 public interface SalesProjection {
-    
-    
+
     long getId();
+
     String getInvoice();
-    
-   // @Value("#{person.names}+' '+#{person.lastnames}")
-    String fullName();
-    @Value("#{person.id}")
+
+    @Value("#{target.names+' '+ target.lastnames}")
+    String getFullName();
+
+    @Value("#{target.id_person}")
     String getIdPerson();
+
+    String getCreatedAt();
 }

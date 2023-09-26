@@ -1,7 +1,7 @@
 <div th:fragment="pagination" class="flex p-2 justify-center" >
 <div
  class="join w-96 grid grid-cols-2">
- <a th:href="@{/product/search?page={previous}(previous=${pagination.previous})}" class="join-item btn btn-outline">Previous page</a>
- <a th:href="@{/product/search?page={next}(next=${pagination.next})}" class="join-item btn btn-outline">Next page</a>
+ <a th:href="@{?page={previous}(previous=${pagination.previous})}" class="join-item btn btn-outline">Previous page</a>
+ <a th:href="@{?page={next}(next=${pagination.next})}" class="join-item btn btn-outline">Next page</a>
 </div>
 </div>

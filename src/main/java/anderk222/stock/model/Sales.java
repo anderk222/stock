@@ -15,10 +15,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -28,12 +34,15 @@ import org.hibernate.annotations.OnDeleteAction;
  */
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Sales {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private long id;
-        private String invoice;
+
+        private String invoice = UUID.randomUUID().toString();
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "person_id")
@@ -43,6 +52,9 @@ public class Sales {
         @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "sales", fetch = FetchType.LAZY)
         @OnDelete(action = OnDeleteAction.CASCADE)
         private List<ProductSales> productSalesList = new ArrayList<>();
+
+        @CreationTimestamp
+        private Instant createdAt;
 
         @Transient
         private BigDecimal total = BigDecimal.ZERO;
@@ -55,8 +67,15 @@ public class Sales {
 
                 productSales.setProduct(product);
 
+                productSales.setCount(count);
+
                 this.productSalesList.add(productSales);
 
+        }
+
+        public Sales(Person person){
+
+                this.person = person;
         }
 
 }

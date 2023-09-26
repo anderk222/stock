@@ -4,9 +4,6 @@
  */
 package anderk222.stock.form;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Data;
 
 /**
@@ -16,8 +13,6 @@ import lombok.Data;
 @Data
 public class ProductSalesForm {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
     private int count=1;

@@ -5,8 +5,11 @@
 package anderk222.stock.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import anderk222.stock.form.ProductCart;
 import anderk222.stock.model.Pagination;
 import anderk222.stock.model.Sales;
 import anderk222.stock.model.SalesProjection;
@@ -42,13 +45,15 @@ public class SalesController {
     }
 
     @GetMapping("/{person}/person")
-    public Pagination<SalesProjection> findByPersonId(
+    public ResponseEntity<?> findByPersonId(
             @PathVariable long person,
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "10", required = false) int size
     ) {
 
-        return service.findByPersonId(person, page, size);
+        Pagination<SalesProjection> data = service.findByPersonId(person, page, size);
+
+        return  ResponseEntity.ok().body(data);
 
     }
 
@@ -77,6 +82,15 @@ public class SalesController {
     @DeleteMapping("/{id}")
     public Sales delete(@PathVariable long id) {
         return service.delete(id);
+
+    }
+
+       @PostMapping("/buy/cart/{user}")
+    public ResponseEntity<Sales> buy(@RequestBody List<ProductCart> products, @PathVariable long user){
+
+        Sales sale = service.buy(products, user);
+
+        return ResponseEntity.status(HttpStatus.OK).body(sale);
 
     }
 }

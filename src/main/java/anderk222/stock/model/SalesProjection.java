@@ -4,6 +4,8 @@
  */
 package anderk222.stock.model;
 
+import java.time.Instant;
+
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -11,13 +13,18 @@ import org.springframework.beans.factory.annotation.Value;
  * @author tanki
  */
 public interface SalesProjection {
-    
-    
+
     long getId();
+
+    @Value("#{target.invoice}")
     String getInvoice();
-    
-   // @Value("#{person.names}+' '+#{person.lastnames}")
-    String fullName();
-    @Value("#{person.id}")
+
+    @Value("#{target.names+' '+ target.lastnames}")
+    String getFullName();
+
+    @Value("#{target.person_id}")
     String getIdPerson();
+
+    @Value("#{target.created_at}")
+    Instant getCreatedAt();
 }

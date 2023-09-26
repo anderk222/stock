@@ -14,11 +14,15 @@ import jakarta.persistence.OneToOne;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import anderk222.stock.form.ProductCart;
 
 /**
  *
@@ -27,6 +31,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Product implements Serializable{
 
     @Id
@@ -48,5 +53,16 @@ public class Product implements Serializable{
     }
 
  
+    public static Product fromProductCart(ProductCart pCart){
+
+        Product product = new Product();
+
+        product.setId(pCart.getId());
+        product.setName(pCart.getName());
+        product.setImg(pCart.getImg());
+        product.setPrice(pCart.getPrice());
+        return product;
+
+    }
 
 }

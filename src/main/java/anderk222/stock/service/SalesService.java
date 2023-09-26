@@ -5,6 +5,7 @@
 package anderk222.stock.service;
 
 import anderk222.stock.exception.ResourceNotFoundException;
+import anderk222.stock.form.ProductCart;
 import anderk222.stock.form.ShoppingForm;
 import anderk222.stock.model.Pagination;
 import anderk222.stock.model.Person;
@@ -65,6 +66,9 @@ public class SalesService {
 
         Pagination<SalesProjection> res = new Pagination<>(page, size, data.getContent());
 
+        res.setNext(pageable.next().getPageNumber());
+        res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
+
         res.setTotalPages(data.getTotalPages());
         res.setTotaltems(data.getTotalElements());
 
@@ -82,6 +86,19 @@ public class SalesService {
 
 
         return repository.save(sale);
+    }
+
+    public Sales buy(List<ProductCart> products, long user){
+
+       // String uuid = UUID.randomUUID().toString();
+
+        Sales sale = repository.save(new Sales(new Person(user)));
+
+        for(ProductCart pCart : products) sale.addProduct(Product.fromProductCart(pCart), pCart.getCount());
+
+        return repository.save(sale);
+        
+
     }
 
     public Sales save(Sales sale) {
