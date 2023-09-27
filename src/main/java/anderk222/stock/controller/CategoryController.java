@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @CrossOrigin("*")
-@RequestMapping("/api/category")
+@RequestMapping("/category")
 public class CategoryController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class CategoryController {
     @GetMapping("/search")
     public String search(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+            @RequestParam(name = "size", defaultValue = "40", required = false) int size,
             @RequestParam(name = "value", defaultValue = "", required = false) String value,
             Model model) {
 

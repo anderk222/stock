@@ -15,14 +15,94 @@
         <div>
             <div th:replace="~{layout/root :: root}"></div>
             <div class="flex flex-col px-6 gap-3">
-             <!-- Content -->
+                <!-- Content -->
 
                 <section class="py-2 flex flex-col gap-2">
-                    
+
                     <div class="flex flex-col w-full border-opacity-50">
                         <div class="divider ">
-                            <h1 class="text-xl text-center">Productos</h1>
+                            <h1 class="text-xl text-center" th:text="${product.id == 0 || product.id == null ? 'Nuevo Producto' :'Editar producto'}" >Nuevo producto</h1>
                         </div>
+                        <form th:action="${product.id == 0 || product.id == null ? '/product' :'/product/'+product.id}" class="w-full" th:object="${product}"
+                            method="post">
+
+                            <div class="form-control w-full">
+                                <label class="label">
+                                    <span class="label-text">Nombre del producto</span>
+                                </label>
+                                <input th:field="*{name}" type="text" placeholder="Type here" class="input input-bordered w-full" />
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <div class="form-control w-full max-w-xs">
+                                    <label class="label">
+                                        <span class="label-text">Precio del producto</span>
+                                    </label>
+                                    <input th:field="*{price}" step="0.01" type="number" min="0" placeholder="Type here"
+                                        class="input input-bordered w-full max-w-xs" />
+                                </div>
+
+                                <div class="form-control w-full max-w-xs">
+                                    <label class="label">
+                                        <span class="label-text">Stock del producto</span>
+                                    </label>
+                                    <input th:field="*{stock}" type="number" min="1" placeholder="Type here"
+                                        class="input input-bordered w-full max-w-xs" />
+
+                                </div>
+                            </div>
+                            <div class="form-control w-full">
+                                <label class="label">
+                                    <span class="label-text">URL de imagen del producto</span>
+                                </label>
+                                <input th:field="*{img}" type="text" placeholder="Type here" class="input input-bordered w-full" />
+                            </div>
+
+                            <div class="flex flex-wrap gap-2">
+                                <div class="form-control w-full max-w-xs">
+                                    <label class="label">
+                                      <span class="label-text">Categoria</span>
+                                    </label>
+                                    <select class="select select-bordered">
+                                      <option disabled selected>Pick one</option>
+                                      <option 
+                                      th:each="category : ${categories}" th:text="${category.name}" 
+                                      th:value="${category.id}"
+                                      >
+                                      </option>
+                                    </select>
+                          
+                                  </div>
+
+                                  <div class="form-control w-[70%]">
+                                    <label class="label">
+                                      <span class="label-text">Provedor</span>
+                                    </label>
+                                    <select class="select select-bordered">
+                                      <option disabled selected>Pick one</option>
+                                      <option 
+                                      th:each="provider : ${providers}" th:text="${provider.person.name}" 
+                                      th:value="${provider.id}"
+                                      >
+                                      </option>
+                                   
+                                    </select>
+                                
+                                  </div>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Detalle del producto</span>
+                                </label>
+                                <textarea class="textarea textarea-bordered h-24" placeholder=""></textarea>
+                                <label class="label">
+                                </label>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn btn-active btn-primary">Guardar</button>
+                                <button class="btn btn-active">Cancelar</button>
+                            </div>
+                        </form>
                     </div>
 
                 </section>

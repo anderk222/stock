@@ -8,6 +8,8 @@ import anderk222.stock.exception.ResourceNotFoundException;
 import anderk222.stock.model.Pagination;
 import anderk222.stock.model.Person;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +41,11 @@ public class PersonService {
         res.setTotaltems(data.getTotalElements());
         
         return res;
+    }
+
+    public List<Person> findAll(){
+
+        return repository.findAll();
     }
     
     public Person findByid(long id){

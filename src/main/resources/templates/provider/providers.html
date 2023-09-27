@@ -8,32 +8,78 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.7/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <th:block th:insert="~{layout/head :: react-cdn}"></th:block>
 </head>
 
 <body>
-    <div class="h-screen flex flex-col justify-between">
+    <div id="root" class="h-screen flex flex-col justify-between">
         <div>
             <div th:replace="~{layout/root :: root}"></div>
-            <div class="flex flex-col px-6 gap-3">
-             <!-- Content -->
+            <div class="flex flex-col px-6 gap-3"> 
+                <section class="py-2 flex flex-col gap-2 ">
 
-                <section class="py-2 flex flex-col gap-2">
-                    
                     <div class="flex flex-col w-full border-opacity-50">
-                        <div class="divider ">
-                            <h1 class="text-xl text-center">Productos</h1>
+                        <div class="divider">
+                            <h1 class="text-xl text-center">Proveedores</h1>
+                        </div>
+                        <div class="self-end" >
+                            <a class="btn btn-actice btn-primary btn-sm" href="/provider/new">Nuevo</a>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="table">
+                                <!-- head -->
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Nombre</th>
+                                        <th>RUC</th>
+                                        <th>email</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- row 1 -->
+                                    <tr th:each="provider : ${pagination.data}" >
+                                        <td th:text="${provider.id}" >
+                                        </td>
+                                        <td>
+                                            <div class="flex items-center space-x-3">
+                                                <div class="avatar">
+                                                    <div class="mask mask-squircle w-12 h-12">
+                                                        <img src="/tailwind-css-component-profile-2@56w.png"
+                                                            alt="Avatar provider" />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div th:text="${provider.person.getFullName()}" class="font-bold">Hart Hagerty</div>
+                                                    <div class="text-sm opacity-50">United States</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td th:text="${provider.ruc}" >
+                                        </td>
+                                        <td th:text="${provider.person.email}" >
+                                        </td>
+                                        <td >
+                                            <a 
+                                            th:href="@{/provider/update/{id}(id=${provider.id})}"
+                                            class="btn btn-ghost btn-xs text-yellow-400">Editar</a>
+                                            <button class="btn btn-ghost btn-xs text-red-500">Eliminar</button>
+                                        </td>
+                                        
+                                    </tr>
+                                   
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
                 </section>
             </div>
-
+            <div th:replace="~{layout/pagination ::pagination}"></div>
         </div>
         <div th:replace="~{layout/footer :: footer}">
-
         </div>
     </div>
-
 </body>
-
 </html>

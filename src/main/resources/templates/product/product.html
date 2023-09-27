@@ -33,6 +33,7 @@
                                 <h2 class="font-bold text-3xl" th:text="${product.name}">Product Name</h2>
                                 <p th:text="${product.name}"></p>
                                 <div class="divider"></div>
+                                <p th:text="${product.detail}" ></p>
                                 <p th:text="${product.price}"></p>
                                 <p class="text-bold text-black"> Stock: <span th:text="${product.stock}"></span></p>
 
@@ -43,7 +44,10 @@
                                         <input id="ipt-count" class="w-36 bg-slate-50 p-2" type="number"
                                             th:field="*{count}" />
                                     </div>
-                                    <button type="submit" class="btn btn-sm btn-success">
+                                    <a th:href="@{/product/update/{id}(id=${product.id})}" type="button" class="btn btn-active btn-warning btn-sm">
+                                        Editar
+                                    </a>
+                                    <button type="submit" class="btn btn-active btn-sm btn-success">
 
 
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -51,7 +55,7 @@
                                             <path
                                                 d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z" />
                                         </svg> Comprar</button>
-                                    <button id="btn-add" type="button" class="btn btn-success btn-sm">
+                                    <button id="btn-add" type="button" class="btn btn-success btn-active btn-sm">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

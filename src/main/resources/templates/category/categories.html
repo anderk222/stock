@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.7/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <th:block th:replace="~{layout/head :: react-cdn}"></th:block>
+</head>
+
+<body>
+    <div class="h-screen flex flex-col justify-between">
+        <div>
+            <div th:replace="~{layout/root :: root}"></div>
+            <div class="flex flex-col px-6 gap-3">
+                <!-- Content -->
+
+                <section class="py-2 flex flex-col gap-2">
+
+                    <div class="flex flex-col w-full border-opacity-50">
+                        <div class="divider ">
+                            <h1 class="text-xl text-center">Categorias</h1>
+                        </div>
+
+                        <div id="category-root" class="w-full">
+
+
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+
+        </div>
+        <div th:replace="~{layout/footer :: footer}">
+        </div>
+    </div>
+
+    <script type="text/babel" data-presets="react,stage-3">
+
+        const { useState, useEffect } = React;
+
+        const Items = () => {
+
+            const [categories, setCategories] = useState( /*[[${pagination.data}]]*/[]);
+
+            return (
+                <div className="flex flex-wrap gap-2">
+
+                    {categories.map((v, k) => <Item
+                        idx={k}
+                        item={v} key={k}
+                        remove={handlerRemoveCategory}
+                        input={handlerInputName}
+                        blur={handlerBlurName}
+                    />)}
+
+                    <svg onClick={handlerNewCategory}
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16" height="16" fill="currentColor"
+                        className="cursor-pointer bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
+                    </svg>
+                </div>
+            );
+
+            function handlerNewCategory() {
+                setCategories((c) => [...c, { name: 'new Category', id: 0 }]);
+            }
+
+            function handlerRemoveCategory(idx) {
+
+                let category = categories[idx];
+
+                if (category.id == 0) return setCategories((c) => c.filter((_, i) => i != idx));
+
+                fetch(`/category/${categories[idx].id}`, {
+                    method: 'DELETE'
+                }).then((res) => {
+
+                    if (res.status != 200) return alert('error al elimiar');
+
+                    setCategories(c => c.filter(v => v.id != category.id));
+                }).catch(c => alert('Ha ocurrido un error'));
+            }
+
+            function handlerInputName(idx, event) {
+
+                setCategories(c => {
+
+                    let updated = [...c];
+
+                    updated[idx].name = event.target.value;
+
+                    return [...updated];
+
+                });
+
+            }
+
+            function handlerBlurName(idx) {
+
+                let category = categories[idx];
+
+                if (categories[idx].id == 0) saveCategory(category, idx);
+                else updateCategory(category, idx);
+
+            }
+
+            function saveCategory(category, idx) {
+
+                fetch('/category', {
+                    method: 'POST',
+                    body: JSON.stringify(category),
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(res => {
+                    if (res.status != 201) alert('Error al guardar');
+                    else (async () => {
+
+                        let new_category = await res.json();
+
+                        setCategories((c) => {
+
+                            let updated = [...c];
+                            updated[idx] = c;
+
+                            return [...updated]
+
+                        })
+
+                    })();
+
+                }).catch(() => alert('Error al guardar'));
+
+            }
+
+            function updateCategory(category, idx) {
+
+                fetch(`/category/${category.id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(category),
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(res => {
+                    if (res.status != 201) alert('Error al editar');
+                    else (async () => {
+
+                        let new_category = await res.json();
+
+                        setCategories((c) => {
+
+                            let updated = [...c];
+                            updated[idx] = c;
+
+                            return [...updated]
+
+                        })
+
+                    })();
+
+                }).catch(() => alert('Error al editar'));
+            }
+        };
+
+        const root_categories = ReactDOM
+            .createRoot(document.getElementById("category-root"));
+
+        root_categories.render(<Items />);
+
+    </script>
+
+    <script type="text/babel" data-presets="react,stage-3">
+
+        const Item = ({ item, remove, idx, input, blur }) => {
+
+            return (
+                <div className="badge badge-success gap-2">
+                    <svg
+                        onClick={function () { remove(idx) }} xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        className=" cursor-pointer inline-block w-4 h-4 stroke-current">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <input
+                        onChange={function (event) { input(idx, event); }}
+                        onBlur={function(){blur(idx);}}
+                        className="outline-none bg-transparent"
+                        value={item.name}></input>
+                </div>
+            );
+        }
+
+    </script>
+
+
+</body>
+
+</html>

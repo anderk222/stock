@@ -4,7 +4,6 @@
  */
 package anderk222.stock.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +11,9 @@ import org.springframework.ui.Model;
 import anderk222.stock.form.ShoppingForm;
 import anderk222.stock.model.Pagination;
 import anderk222.stock.model.Product;
+import anderk222.stock.service.CategoryService;
 import anderk222.stock.service.ProductService;
+import anderk222.stock.service.ProviderService;
 import anderk222.stock.service.SalesService;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,6 +41,11 @@ public class ProductController {
     @Autowired
     private SalesService salesService;
 
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private ProviderService providerService;
 
     @GetMapping("/search")
     public String search(
@@ -60,17 +66,17 @@ public class ProductController {
 
         Product product = service.findByid(id);
 
-        ShoppingForm shop = new ShoppingForm(1,1l,1l);
+        ShoppingForm shop = new ShoppingForm(1, 1l, 1l);
 
         model.addAttribute("product", product);
         model.addAttribute("shop", shop);
 
-         return "product/product";
+        return "product/product";
 
     }
 
     @PostMapping("/buy")
-    public RedirectView buy(@ModelAttribute("shop") ShoppingForm shop){
+    public RedirectView buy(@ModelAttribute("shop") ShoppingForm shop) {
 
         salesService.buy(shop);
 
@@ -95,7 +101,11 @@ public class ProductController {
     @GetMapping("/new")
     public String save(Model model) {
 
-                model.addAttribute("product", new Product());
+        model.addAttribute("product", new Product());
+
+        model.addAttribute("categories", categoryService.findAll());
+
+        model.addAttribute("providers", providerService.findAll());
 
         return "product/new-product";
 
@@ -105,6 +115,10 @@ public class ProductController {
     public String save(@PathVariable long id, Model model) {
 
         model.addAttribute("product", service.findByid(id));
+
+        model.addAttribute("categories", categoryService.findAll());
+
+        model.addAttribute("providers", providerService.findAll());
 
         return "product/new-product";
 

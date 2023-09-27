@@ -9,6 +9,8 @@ import anderk222.stock.model.Pagination;
 import anderk222.stock.model.Person;
 import anderk222.stock.model.Provider;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,6 +52,12 @@ public class ProviderService {
 
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id, "id", "provider"));
+
+    }
+
+    public List<Provider> findAll(){
+
+        return repository.findAll(); 
 
     }
 

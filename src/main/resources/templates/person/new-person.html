@@ -15,14 +15,53 @@
         <div>
             <div th:replace="~{layout/root :: root}"></div>
             <div class="flex flex-col px-6 gap-3">
-             <!-- Content -->
+                <!-- Content -->
 
                 <section class="py-2 flex flex-col gap-2">
-                    
+
                     <div class="flex flex-col w-full border-opacity-50">
                         <div class="divider ">
-                            <h1 class="text-xl text-center">Productos</h1>
+                            <h1 th:text="${person.id == 0 || person.id==null ? 'Nueva Persona' : 'Editar Persona'}"
+                                class="text-xl text-center"></h1>
                         </div>
+                        <form th:action="${person.id == 0 || person.id==null ? '/product' : '/product/' + person.id}" th:object="${person}" class="w-full" method="post">
+
+                            <div class="flex flex-wrap gap-2">
+                                <div class="form-control w-[49.5%]">
+                                    <label class="label">
+                                        <span class="label-text">Nombre Persona</span>
+                                    </label>
+                                    <input 
+                                    th:field="*{names}"
+                                    type="text" placeholder="Type here" class="input input-bordered w-full" />
+                                </div>
+
+                                <div class="form-control w-[49.5%]">
+                                    <label class="label">
+                                        <span class="label-text">Apellido persona</span>
+                                    </label>
+                                    <input th:field="*{lastnames}" type="text" placeholder="Type here" class="input input-bordered w-full" />
+                                </div>
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Email</span>
+                                </label>
+                                <input th:field="*{email}" type="email" placeholder="Type here" class="input input-bordered w-full" />
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Identificacion</span>
+                                </label>
+                                <input th:field="*{dni}" type="text" placeholder="Type here" class="input input-bordered w-full" />
+                            </div>
+
+                            <div class="flex flex-wrap pt-2 gap-2">
+                                <button class="btn btn-active btn-primary">Guardar</button>
+                                <button class="btn btn-active">Cancelar</button>
+                            </div>
+                        </form>
                     </div>
 
                 </section>
@@ -30,7 +69,6 @@
 
         </div>
         <div th:replace="~{layout/footer :: footer}">
-
         </div>
     </div>
 

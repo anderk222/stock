@@ -4,18 +4,35 @@
  */
 package anderk222.stock.form;
 
+import anderk222.stock.model.Provider;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author tanki
  */
+
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProviderForm {
 
     private Long id;
     private String ruc;
     
-    private PersonForm person;
+    private long personId;
+
+    private String fullName;
     
+    public ProviderForm(Provider provider){
+
+        this.id = provider.getId();
+        this.fullName = provider.getPerson().getFullName();
+        this.personId = provider.getPerson().getId();
+        this.ruc = provider.getRuc();
+
+    }
+
 }

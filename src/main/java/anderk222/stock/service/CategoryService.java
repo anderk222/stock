@@ -8,6 +8,8 @@ import anderk222.stock.exception.ResourceNotFoundException;
 import anderk222.stock.model.Category;
 import anderk222.stock.model.Pagination;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +41,12 @@ public class CategoryService {
         res.setTotaltems(data.getTotalElements());
         
         return res;
+    }
+
+    public List<Category> findAll(){
+
+        return repository.findAll();
+
     }
     
     public Category findByid(long id){

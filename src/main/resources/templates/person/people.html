@@ -15,13 +15,75 @@
         <div>
             <div th:replace="~{layout/root :: root}"></div>
             <div class="flex flex-col px-6 gap-3">
-             <!-- Content -->
+                <!-- Content -->
 
                 <section class="py-2 flex flex-col gap-2">
-                    
+
                     <div class="flex flex-col w-full border-opacity-50">
-                        <div class="divider ">
-                            <h1 class="text-xl text-center">Productos</h1>
+                        <div class="divider">
+                            <h1 class="text-xl text-center">Personas</h1>
+                        </div>
+                        <div class="self-end" >
+                            <a class="btn btn-actice btn-primary btn-sm" href="/person/new">Nuevo</a>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="table">
+                                <!-- head -->
+                                <thead>
+                                    <tr>
+
+                                        <th></th>
+                                        <th>Name</th>
+                                        <th>Identificacion</th>
+                                        <th>email</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- row 1 -->
+                                    <tr th:each="person : ${pagination.data}" >
+                                        <th th:text="${person.id}" >
+                                        </th>
+                                        <td>
+                                            <div class="flex items-center space-x-3">
+                                                <div class="avatar">
+                                                    <div class="mask mask-squircle w-12 h-12">
+                                                        <img src="/tailwind-css-component-profile-2@56w.png"
+                                                            alt="Avatar Person" />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div th:text="${person.getFullName()}" class="font-bold">Hart Hagerty</div>
+                                                    <div class="text-sm opacity-50">United States</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td th:text="${person.dni}" >
+                                            Zemlak, Daniel and Leannon
+                                        </td>
+                                        <td th:text="${person.email}" >Purple</td>
+                                        <th>
+                                            <a 
+                                            th:href="@{/person/update/{id}(id=${person.id})}"
+                                            class="btn btn-ghost btn-xs text-yellow-400">Editar</a>
+                                            <button class="btn btn-ghost btn-xs text-red-500">Eliminar</button>
+                                        </th>
+                                    </tr>
+                                   
+                                </tbody>
+                                <!-- foot -->
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th>Name</th>
+                                        <th>Job</th>
+                                        <th>Favorite Color</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+
+                            </table>
                         </div>
                     </div>
 
@@ -29,6 +91,7 @@
             </div>
 
         </div>
+        <th:block th:replace="~{layout/pagination :: pagination}"></th:block>
         <div th:replace="~{layout/footer :: footer}">
 
         </div>
