@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package anderk222.stock.model;
+package anderk222.stock.dto;
 
 import java.time.Instant;
 
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public interface SalesProjection {
 
-    long getId();
+    Long getId();
 
     @Value("#{target.invoice}")
     String getInvoice();

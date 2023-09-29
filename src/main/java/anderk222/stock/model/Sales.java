@@ -40,7 +40,7 @@ public class Sales {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private long id;
+        private Long id;
 
         private String invoice = UUID.randomUUID().toString();
 

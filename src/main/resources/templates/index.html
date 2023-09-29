@@ -17,14 +17,18 @@
       <div class="flex flex-col px-6 gap-3">
         <div class="carousel h-96 w-full">
           <div th:each="product,stat : ${sellest}" th:id="${'item'+stat.index}" class="carousel-item w-full">
-            <img th:src="${product.img}" class="w-full object-contain" />
+            <img 
+            th:attr="onclick=${'location.href='+'''/product/' + product.id+''''}" 
+            th:src="${product.img}" 
+            class="w-full object-contain cursor-pointer" />
           </div>
         </div>
         <div class="flex justify-center w-full py-2 gap-2">
-          <a href="#item1" class="btn btn-xs">1</a>
-          <a href="#item2" class="btn btn-xs">2</a>
-          <a href="#item3" class="btn btn-xs">3</a>
-          <a href="#item4" class="btn btn-xs">4</a>
+          <a 
+          th:each="product,stat : ${sellest}" 
+          th:href="@{#item{i}(i=${stat.index})}" 
+          th:text="${stat.index+1}" 
+          class="btn btn-xs">1</a>
         </div>
         <section class="py-2 flex flex-col gap-2">
           <div class="flex flex-col w-full border-opacity-50">

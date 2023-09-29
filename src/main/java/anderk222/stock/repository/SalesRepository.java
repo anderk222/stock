@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import anderk222.stock.dto.SalesProjection;
 import anderk222.stock.model.Sales;
-import anderk222.stock.model.SalesProjection;
 
 /**
  *
@@ -22,6 +22,6 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
     
     @Query(value ="SELECT sales.*, person.id as id_person,person.names,person.lastnames FROM Sales as sales JOIN Person as person on person.id=sales.person_id WHERE person.id=:person"
     , nativeQuery = true)
-    Page<SalesProjection> findByPersonId(@Param("person") long person, Pageable pageable);    
+    Page<SalesProjection> findByPersonId(@Param("person") Long person, Pageable pageable);    
    
 } 

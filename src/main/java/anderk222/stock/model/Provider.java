@@ -28,7 +28,7 @@ public class Provider {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id = 0l;
     private String ruc;
     
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -43,7 +43,12 @@ public class Provider {
       this.ruc = pForm.getRuc();
       this.person = new Person(pForm.getPersonId());
       
+    }
 
+
+    public Provider(Long id){
+
+      this.id = id;
     }
 
 }

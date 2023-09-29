@@ -1,7 +1,9 @@
-package anderk222.stock.model;
+package anderk222.stock.dto;
 
 import java.math.BigDecimal;
 
+import anderk222.stock.model.ProductDetail;
+import anderk222.stock.model.ProductSales;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

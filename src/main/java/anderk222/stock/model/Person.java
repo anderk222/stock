@@ -4,6 +4,7 @@
  */
 package anderk222.stock.model;
 
+import anderk222.stock.form.PersonForm;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,20 +25,29 @@ public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String names;
     private String lastnames;
     private String dni;
     private String email;
 
-    public Person(long id){
+    public Person(Long id) {
 
         this.id = id;
 
     }
 
-    public String getFullName(){
+    public static Person fromPersonForm(PersonForm pf) {
+
+        Person person = new Person(
+                pf.getId(), pf.getNames(), pf.getLastnames(), pf.getDni(), pf.getEmail());
+
+        return person;
+
+    }
+
+    public String getFullName() {
 
         return this.names + ' ' + this.lastnames;
     }

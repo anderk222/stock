@@ -30,7 +30,7 @@ public class ProductDetailController {
     private ProductDetailService service;
 
     @GetMapping("/{id}")
-    public ProductDetail findById(@PathVariable long id) {
+    public ProductDetail findById(@PathVariable Long id) {
 
         return service.findByid(id);
 
@@ -44,13 +44,13 @@ public class ProductDetailController {
     }
 
     @PutMapping("/{id}")
-    public ProductDetail update(@PathVariable long id,@RequestBody ProductDetail productDetail) {
+    public ProductDetail update(@PathVariable Long id,@RequestBody ProductDetail productDetail) {
 
         return service.save(productDetail);
     }
 
     @DeleteMapping("/{id}")
-    public ProductDetail delete(@PathVariable long id) {
+    public ProductDetail delete(@PathVariable Long id) {
 
 
         return service.delete(id);

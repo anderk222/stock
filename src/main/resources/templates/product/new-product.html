@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.7/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <th:block th:replace="~{layout/head :: react-cdn}" ></th:block>
+
 </head>
 
 <body>
@@ -31,6 +33,7 @@
                                     <span class="label-text">Nombre del producto</span>
                                 </label>
                                 <input th:field="*{name}" type="text" placeholder="Type here" class="input input-bordered w-full" />
+                                <p class=" text-red-400" th:if="${#fields.hasErrors('name')}"  th:errors="*{name}"></p>
                             </div>
                             <div class="flex flex-wrap gap-2">
                                 <div class="form-control w-full max-w-xs">
@@ -39,6 +42,8 @@
                                     </label>
                                     <input th:field="*{price}" step="0.01" type="number" min="0" placeholder="Type here"
                                         class="input input-bordered w-full max-w-xs" />
+                                <p class=" text-red-400" th:if="${#fields.hasErrors('price')}"  th:errors="*{price}"></p>
+
                                 </div>
 
                                 <div class="form-control w-full max-w-xs">
@@ -47,6 +52,8 @@
                                     </label>
                                     <input th:field="*{stock}" type="number" min="1" placeholder="Type here"
                                         class="input input-bordered w-full max-w-xs" />
+                                <p class=" text-red-400" th:if="${#fields.hasErrors('stock')}"  th:errors="*{stock}"></p>
+
 
                                 </div>
                             </div>
@@ -55,6 +62,8 @@
                                     <span class="label-text">URL de imagen del producto</span>
                                 </label>
                                 <input th:field="*{img}" type="text" placeholder="Type here" class="input input-bordered w-full" />
+                                <p class=" text-red-400" th:if="${#fields.hasErrors('img')}"  th:errors="*{img}"></p>
+                            
                             </div>
 
                             <div class="flex flex-wrap gap-2">
@@ -62,14 +71,15 @@
                                     <label class="label">
                                       <span class="label-text">Categoria</span>
                                     </label>
-                                    <select class="select select-bordered">
-                                      <option disabled selected>Pick one</option>
+                                    <select th:field="*{categoryId}" class="select select-bordered">
+                                      <option disabled selected value="0">Pick one</option>
                                       <option 
                                       th:each="category : ${categories}" th:text="${category.name}" 
                                       th:value="${category.id}"
                                       >
                                       </option>
                                     </select>
+                                    <p class=" text-red-400" th:if="${#fields.hasErrors('categoryId')}"  th:errors="*{categoryId}"></p>
                           
                                   </div>
 
@@ -77,15 +87,16 @@
                                     <label class="label">
                                       <span class="label-text">Provedor</span>
                                     </label>
-                                    <select class="select select-bordered">
-                                      <option disabled selected>Pick one</option>
+                                    <select th:field="*{providerId}" class="select select-bordered">
+                                      <option disabled selected value="0">Pick one</option>
                                       <option 
-                                      th:each="provider : ${providers}" th:text="${provider.person.name}" 
+                                      th:each="provider : ${providers}" th:text="${provider.person.getFullName()}" 
                                       th:value="${provider.id}"
                                       >
                                       </option>
                                    
                                     </select>
+                                    <p class=" text-red-400" th:if="${#fields.hasErrors('providerId')}"  th:errors="*{providerId}"></p>
                                 
                                   </div>
                             </div>
@@ -94,9 +105,10 @@
                                 <label class="label">
                                     <span class="label-text">Detalle del producto</span>
                                 </label>
-                                <textarea class="textarea textarea-bordered h-24" placeholder=""></textarea>
+                                <textarea th:field="*{detail}" class="textarea textarea-bordered h-24" placeholder=""></textarea>
                                 <label class="label">
-                                </label>
+                                <p class=" text-red-400" th:if="${#fields.hasErrors('detail')}"  th:errors="*{detail}"></p>
+                                
                             </div>
                             <div class="flex flex-wrap gap-2">
                                 <button class="btn btn-active btn-primary">Guardar</button>

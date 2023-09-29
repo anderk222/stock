@@ -1,11 +1,15 @@
 package anderk222.stock.controller;
 
+import anderk222.stock.form.PersonForm;
 import anderk222.stock.model.Pagination;
 import anderk222.stock.model.Person;
 import anderk222.stock.service.PersonService;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,7 +47,7 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable long id, Model model) {
+    public String findById(@PathVariable Long id, Model model) {
 
         model.addAttribute("person", service.findByid(id));
 
@@ -52,9 +56,11 @@ public class PersonController {
     }
 
     @GetMapping("/update/{id}")
-    public String update(@PathVariable long id, Model model) {
+    public String update(@PathVariable Long id, Model model) {
 
-        model.addAttribute("person", service.findByid(id));
+        PersonForm person = new PersonForm(service.findByid(id));
+
+        model.addAttribute("person", person);
 
         return "person/new-person";
 
@@ -63,30 +69,43 @@ public class PersonController {
     @GetMapping("/new")
     public String update(Model model) {
 
-        model.addAttribute("person", new Person());
+        model.addAttribute("person", new PersonForm());
 
         return "person/new-person";
 
     }
 
     @PostMapping()
-    public RedirectView save(@ModelAttribute("person") Person person) {
+    public String save(@Valid @ModelAttribute("person") PersonForm person, BindingResult result, Model model) {
 
-        return new RedirectView("person/search");
+        if (result.hasErrors()) {
+            model.addAttribute("person", person);
 
+            return "person/new-person";
+        }
+
+        service.save(Person.fromPersonForm(person));
+
+        return "redirect:/person/search";
     }
 
     @PostMapping("/{id}")
-    public RedirectView update(@PathVariable long id, @ModelAttribute("person") Person person) {
+    public String update(@PathVariable Long id,@Valid @ModelAttribute("person") PersonForm person, BindingResult result, Model model) {
 
-        service.update(id, person);
+         if(result.hasErrors()){
 
-        return new RedirectView("person/search");
+            model.addAttribute("person",person);
+
+            return "person/new-person";
+         }
+        service.update(id, Person.fromPersonForm(person));
+
+        return "redirect:/person/search";
 
     }
 
     @GetMapping("/delete/{id}")
-    public RedirectView delete(@PathVariable long id) {
+    public RedirectView delete(@PathVariable Long id) {
 
         service.delete(id);
         return new RedirectView("person/search");

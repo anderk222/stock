@@ -4,7 +4,11 @@
  */
 package anderk222.stock.form;
 
+
 import anderk222.stock.model.Provider;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,10 +23,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProviderForm {
 
-    private Long id;
+    private Long id = 0l;
+
+    @Size(min = 10,max=10, message = "RUC debe tener minimo 10 caracteres")
+    @NotEmpty()
     private String ruc;
     
-    private long personId;
+    @Min(value =  1l, message="Persona invalida")
+    private Long personId = 0l;
 
     private String fullName;
     

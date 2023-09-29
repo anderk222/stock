@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
+import anderk222.stock.dto.SalesProjection;
 import anderk222.stock.model.Pagination;
 import anderk222.stock.model.Sales;
-import anderk222.stock.model.SalesProjection;
 import anderk222.stock.service.SalesService;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,14 +32,14 @@ public class ShoppingController {
     private SalesService service;
 
     @GetMapping("/{id}")
-    public Sales findById(long id) {
+    public Sales findById(Long id) {
 
         return service.findByid(id);
     }
 
     @GetMapping("/{person}/person")
     public String findByPersonId(
-            @PathVariable long person,
+            @PathVariable Long person,
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "10", required = false) int size,
             Model model) {
@@ -74,13 +74,13 @@ public class ShoppingController {
     }
 
     @PutMapping("/{id}")
-    public Sales update(@PathVariable long id, @RequestBody Sales sale) {
+    public Sales update(@PathVariable Long id, @RequestBody Sales sale) {
 
         return service.save(sale);
     }
 
     @DeleteMapping("/{id}")
-    public Sales delete(@PathVariable long id) {
+    public Sales delete(@PathVariable Long id) {
         return service.delete(id);
 
     }
@@ -90,7 +90,7 @@ public class ShoppingController {
         Model model, 
         @RequestParam( name = "page", defaultValue="0", required=false ) int page,
         @RequestParam(name = "size", defaultValue = "10", required = false) int size,
-        @PathVariable long person){
+        @PathVariable Long person){
 
         Pagination<SalesProjection> data = service.findByPersonId(person, page, size);
 
@@ -101,7 +101,7 @@ public class ShoppingController {
     }
 
     @GetMapping("/purchase/{id}")
-    public String purchase(Model model,@PathVariable long id){
+    public String purchase(Model model,@PathVariable Long id){
 
         Sales data = service.findByid(id);
         

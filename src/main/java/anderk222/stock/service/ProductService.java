@@ -38,6 +38,7 @@ public class ProductService {
                 .findByNameContainingIgnoreCase(value, pageable);
 
         Pagination<Product> res = new Pagination<>(page, size, data.getContent());
+        
         res.setNext(pageable.next().getPageNumber());
         res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
 
@@ -47,14 +48,14 @@ public class ProductService {
         return res;
     }
 
-    public Product findByid(long id) {
+    public Product findByid(Long id) {
 
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id, "id", "product"));
 
     }
 
-    public Pagination<Product> findByProviderId(long id, int page, int size) {
+    public Pagination<Product> findByProviderId(Long id, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -63,6 +64,9 @@ public class ProductService {
 
         Pagination<Product> res = new Pagination<>(page, size, data.getContent());
 
+        res.setNext(pageable.next().getPageNumber());
+        res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
+
         res.setTotalPages(data.getTotalPages());
         res.setTotaltems(data.getTotalElements());
 
@@ -70,7 +74,7 @@ public class ProductService {
 
     }
     
-        public Pagination<Product> findByCategoryId(long id, int page, int size) {
+        public Pagination<Product> findByCategoryId(Long id, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -95,13 +99,13 @@ public class ProductService {
 
     }
 
-    public Product update(long id, Product product) {
+    public Product update(Long id, Product product) {
         product.setId(id);
 
         return repository.save(product);
     }
 
-    public Product delete(long id) {
+    public Product delete(Long id) {
 
         Product product = findByid(id);
 

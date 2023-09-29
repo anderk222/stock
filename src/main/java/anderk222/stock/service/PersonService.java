@@ -36,6 +36,9 @@ public class PersonService {
                 .findByNamesContainingIgnoreCase(value,pageable);
         
         Pagination<Person> res = new Pagination<>(page, size, data.getContent());
+
+        res.setNext(pageable.next().getPageNumber());
+        res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
         
         res.setTotalPages(data.getTotalPages());
         res.setTotaltems(data.getTotalElements());
@@ -48,7 +51,7 @@ public class PersonService {
         return repository.findAll();
     }
     
-    public Person findByid(long id){
+    public Person findByid(Long id){
     
         return repository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException(id, "id", "person"));
@@ -63,13 +66,13 @@ public class PersonService {
         
     }
     
-    public Person update(long id,Person person){
+    public Person update(Long id,Person person){
         person.setId(id);
         
         return repository.save(person);
     }
     
-    public Person delete(long id){
+    public Person delete(Long id){
         
         Person person = findByid(id);
         

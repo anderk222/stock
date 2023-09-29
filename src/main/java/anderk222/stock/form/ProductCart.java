@@ -11,13 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductCart {
  
-        private long id;
+        private Long id;
         private String img;
         private String name;
         private BigDecimal price;
         private double total;
         private int count;
-    
-    
-
 }

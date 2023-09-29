@@ -37,6 +37,9 @@ public class CategoryService {
         
         Pagination<Category> res = new Pagination<>(page, size, data.getContent());
         
+        res.setNext(pageable.next().getPageNumber());
+        res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
+        
         res.setTotalPages(data.getTotalPages());
         res.setTotaltems(data.getTotalElements());
         
@@ -49,7 +52,7 @@ public class CategoryService {
 
     }
     
-    public Category findByid(long id){
+    public Category findByid(Long id){
     
         return repository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException(id, "id", "category"));
@@ -64,13 +67,13 @@ public class CategoryService {
         
     }
     
-    public Category update(long id,Category category){
+    public Category update(Long id,Category category){
         category.setId(id);
         
         return repository.save(category);
     }
     
-    public Category delete(long id){
+    public Category delete(Long id){
         
         Category category = findByid(id);
         

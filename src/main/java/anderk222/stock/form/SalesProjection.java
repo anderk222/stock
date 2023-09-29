@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public interface SalesProjection {
 
-    long getId();
+    Long getId();
 
     String getInvoice();
 

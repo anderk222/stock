@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.7/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <th:block th:replace="~{layout/head :: react-cdn}" ></th:block>
+
 </head>
 
 <body>
@@ -33,6 +35,7 @@
                             </label>
                             <input th:field="*{ruc}" type="text" placeholder="Type here"
                                 class="input input-bordered w-full" />
+                                <p class=" text-red-400" th:if="${#fields.hasErrors('ruc')}"  th:errors="*{ruc}"></p>
                         </div>
 
                         <div class="form-control w-full ">
@@ -44,6 +47,8 @@
                                 <option th:each="person : ${people}" th:value="${person.id}" th:text="${person.getFullName()}">
                                 </option>
                             </select>
+                            <p class=" text-red-400" th:if="${#fields.hasErrors('personId')}"  th:errors="*{personId}"></p>
+
                         </div>
                         <div class="flex pt-2 flex-wrap gap-2">
                             <button class="btn btn-active btn-primary">Guardar</button>

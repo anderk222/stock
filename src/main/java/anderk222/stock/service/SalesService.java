@@ -4,6 +4,7 @@
  */
 package anderk222.stock.service;
 
+import anderk222.stock.dto.SalesProjection;
 import anderk222.stock.exception.ResourceNotFoundException;
 import anderk222.stock.form.ProductCart;
 import anderk222.stock.form.ShoppingForm;
@@ -12,7 +13,6 @@ import anderk222.stock.model.Person;
 import anderk222.stock.model.Product;
 import anderk222.stock.model.ProductSales;
 import anderk222.stock.model.Sales;
-import anderk222.stock.model.SalesProjection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,7 +38,7 @@ public class SalesService {
     @Autowired 
     private ProductService productService;
 
-    public Sales findByid(long id) {
+    public Sales findByid(Long id) {
         
         Sales sales =repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id, "id", "sale"));
@@ -57,7 +57,7 @@ public class SalesService {
         return sales;
     }
 
-    public Pagination<SalesProjection> findByPersonId(long id, int page, int size) {
+    public Pagination<SalesProjection> findByPersonId(Long id, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -88,7 +88,7 @@ public class SalesService {
         return repository.save(sale);
     }
 
-    public Sales buy(List<ProductCart> products, long user){
+    public Sales buy(List<ProductCart> products, Long user){
 
        // String uuid = UUID.randomUUID().toString();
 
@@ -117,7 +117,7 @@ public class SalesService {
         
     }
 
-    public Sales update(long id, Sales sale) {
+    public Sales update(Long id, Sales sale) {
         
         List<ProductSales> old_product_sale = findByid(id).getProductSalesList();
        
@@ -157,7 +157,7 @@ public class SalesService {
         return repository.save(sale);
     }
 
-    public Sales delete(long id) {
+    public Sales delete(Long id) {
 
         Sales sale = this.findByid(id);
 

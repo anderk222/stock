@@ -16,6 +16,6 @@ import anderk222.stock.model.ProductSales;
  */
 public interface ProductSalesRepository extends JpaRepository<ProductSales, Long> {
 
-    List<ProductSales> findBySalesId(long id); 
+    List<ProductSales> findBySalesId(Long id); 
     
 }

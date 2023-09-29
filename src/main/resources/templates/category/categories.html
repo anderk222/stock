@@ -35,17 +35,20 @@
             </div>
 
         </div>
+        <th:block th:replace="~{layout/pagination :: pagination}" ></th:block>
         <div th:replace="~{layout/footer :: footer}">
         </div>
     </div>
 
-    <script type="text/babel" data-presets="react,stage-3">
+    <script type="text/babel"  th:inline="javascript" data-presets="react,stage-3">
 
         const { useState, useEffect } = React;
 
+        const data = /*[[${pagination.data}]]*/[]
+
         const Items = () => {
 
-            const [categories, setCategories] = useState( /*[[${pagination.data}]]*/[]);
+            const [categories, setCategories] = useState([...data]);
 
             return (
                 <div className="flex flex-wrap gap-2">
@@ -126,7 +129,7 @@
                         setCategories((c) => {
 
                             let updated = [...c];
-                            updated[idx] = c;
+                            updated[idx] = new_category;
 
                             return [...updated]
 
@@ -145,7 +148,7 @@
                     body: JSON.stringify(category),
                     headers: { 'Content-Type': 'application/json' }
                 }).then(res => {
-                    if (res.status != 201) alert('Error al editar');
+                    if (res.status != 200) alert('Error al editar');
                     else (async () => {
 
                         let new_category = await res.json();
@@ -153,7 +156,7 @@
                         setCategories((c) => {
 
                             let updated = [...c];
-                            updated[idx] = c;
+                            updated[idx] = new_category;
 
                             return [...updated]
 
@@ -177,7 +180,7 @@
         const Item = ({ item, remove, idx, input, blur }) => {
 
             return (
-                <div className="badge badge-success gap-2">
+                <div className="badge badge-success w-fit gap-2">
                     <svg
                         onClick={function () { remove(idx) }} xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -189,7 +192,7 @@
                     <input
                         onChange={function (event) { input(idx, event); }}
                         onBlur={function(){blur(idx);}}
-                        className="outline-none bg-transparent"
+                        className="outline-none w-fit bg-transparent flex "
                         value={item.name}></input>
                 </div>
             );

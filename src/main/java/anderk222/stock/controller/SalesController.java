@@ -9,10 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import anderk222.stock.dto.SalesProjection;
 import anderk222.stock.form.ProductCart;
 import anderk222.stock.model.Pagination;
 import anderk222.stock.model.Sales;
-import anderk222.stock.model.SalesProjection;
 import anderk222.stock.service.SalesService;
 import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -39,14 +39,14 @@ public class SalesController {
     private SalesService service;
 
     @GetMapping("/{id}")
-    public Sales findById(long id) {
+    public Sales findById(Long id) {
 
         return service.findByid(id);
     }
 
     @GetMapping("/{person}/person")
     public ResponseEntity<?> findByPersonId(
-            @PathVariable long person,
+            @PathVariable Long person,
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
 
@@ -73,19 +73,19 @@ public class SalesController {
     }
 
     @PutMapping("/{id}")
-    public Sales update(@PathVariable long id, @RequestBody Sales sale) {
+    public Sales update(@PathVariable Long id, @RequestBody Sales sale) {
 
         return service.save(sale);
     }
 
     @DeleteMapping("/{id}")
-    public Sales delete(@PathVariable long id) {
+    public Sales delete(@PathVariable Long id) {
         return service.delete(id);
 
     }
 
     @PostMapping("/buy/cart/{user}")
-    public ResponseEntity<Sales> buy(@RequestBody List<ProductCart> products, @PathVariable long user) {
+    public ResponseEntity<Sales> buy(@RequestBody List<ProductCart> products, @PathVariable Long user) {
 
         Sales sale = service.buy(products, user);
 

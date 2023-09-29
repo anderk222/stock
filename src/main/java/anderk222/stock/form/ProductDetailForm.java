@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
  public class ProductDetailForm implements Serializable {
 
-    private long id;
+    private Long id;
     private String detail;
     private Integer origin;
     

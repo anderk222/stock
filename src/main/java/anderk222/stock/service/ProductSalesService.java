@@ -4,9 +4,9 @@
  */
 package anderk222.stock.service;
 
+import anderk222.stock.dto.ProductProjection;
 import anderk222.stock.exception.ResourceNotFoundException;
 import anderk222.stock.model.Product;
-import anderk222.stock.model.ProductProjection;
 import anderk222.stock.model.ProductSales;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +46,14 @@ public class ProductSalesService {
 //
 //        return res;
 //    }
-    public ProductSales findByid(long id) {
+    public ProductSales findByid(Long id) {
 
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id, "id", "productSale"));
 
     }
 
-    public List<ProductSales> findBySaleyId(long id) {
+    public List<ProductSales> findBySaleyId(Long id) {
 
         return repository
                 .findBySalesId(id);
@@ -74,7 +74,7 @@ public class ProductSalesService {
 
     }
 
-    public ProductSales update(long id, ProductSales productSale) {
+    public ProductSales update(Long id, ProductSales productSale) {
         productSale.setId(id);
 
         ProductSales old = this.findByid(id);
@@ -95,7 +95,7 @@ public class ProductSalesService {
         return repository.save(productSale);
     }
 
-    public ProductSales delete(long id) {
+    public ProductSales delete(Long id) {
 
         ProductSales productSale = findByid(id);
 

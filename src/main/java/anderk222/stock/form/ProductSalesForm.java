@@ -4,6 +4,8 @@
  */
 package anderk222.stock.form;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
@@ -13,8 +15,10 @@ import lombok.Data;
 @Data
 public class ProductSalesForm {
 
-    private long id;
+    private Long id;
     
+    @NotEmpty(message = "Count es requerido")
+    @Size(min = 1, message = "Count debe tener por lo menos 1 caracter")
     private int count=1;
     
     private ProductForm product;

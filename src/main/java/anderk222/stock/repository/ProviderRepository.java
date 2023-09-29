@@ -17,7 +17,7 @@ import anderk222.stock.model.Provider;
  */
 public interface ProviderRepository extends JpaRepository<Provider, Long>  {
 
-    Optional<Provider> findByPersonId(long id);
+    Optional<Provider> findByPersonId(Long id);
     
     Page<Provider> findByPersonNamesContainingIgnoreCase(String names, Pageable pageable);
     

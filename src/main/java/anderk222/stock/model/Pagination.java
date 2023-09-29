@@ -22,7 +22,7 @@ public class Pagination<T> {
     int limit;
     int totalPages;
     Collection<T> data;
-    long totaltems;
+    Long totaltems;
     int next;
     int previous; 
 

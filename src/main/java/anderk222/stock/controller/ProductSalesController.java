@@ -32,14 +32,14 @@ public class ProductSalesController {
     private ProductSalesService service;
 
     @GetMapping("/{id}")
-    public ProductSales findById(@PathVariable long id) {
+    public ProductSales findById(@PathVariable Long id) {
 
         return service.findByid(id);
 
     }
 
     @GetMapping("/{sale}/sale")
-    public List<ProductSales> findBySaleId(@PathVariable long sale) {
+    public List<ProductSales> findBySaleId(@PathVariable Long sale) {
 
         return service
                 .findBySaleyId(sale);
@@ -53,13 +53,13 @@ public class ProductSalesController {
     }
 
     @PutMapping("/{id}")
-    public ProductSales update(@PathVariable long id, @RequestBody ProductSales productSale) {
+    public ProductSales update(@PathVariable Long id, @RequestBody ProductSales productSale) {
 
         return service.update(id, productSale);
     }
 
     @DeleteMapping("/{id}")
-    public ProductSales delete(long id) {
+    public ProductSales delete(Long id) {
 
         return service.delete(id);
 

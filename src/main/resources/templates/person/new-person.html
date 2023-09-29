@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.7/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <th:block th:replace="~{layout/head :: react-cdn}"></th:block>
+
 </head>
 
 <body>
@@ -24,37 +26,48 @@
                             <h1 th:text="${person.id == 0 || person.id==null ? 'Nueva Persona' : 'Editar Persona'}"
                                 class="text-xl text-center"></h1>
                         </div>
-                        <form th:action="${person.id == 0 || person.id==null ? '/product' : '/product/' + person.id}" th:object="${person}" class="w-full" method="post">
+                        <form th:action="${person.id == 0 || person.id==null ? '/person' : '/person/' + person.id}"
+                            th:object="${person}" class="w-full" method="post">
 
                             <div class="flex flex-wrap gap-2">
                                 <div class="form-control w-[49.5%]">
                                     <label class="label">
                                         <span class="label-text">Nombre Persona</span>
                                     </label>
-                                    <input 
-                                    th:field="*{names}"
-                                    type="text" placeholder="Type here" class="input input-bordered w-full" />
+                                    <input th:field="*{names}" type="text" placeholder="Type here"
+                                        class="input input-bordered w-full" />
+                                <p class=" text-red-400" th:if="${#fields.hasErrors('names')}"  th:errors="*{names}"></p>
+
                                 </div>
 
                                 <div class="form-control w-[49.5%]">
                                     <label class="label">
                                         <span class="label-text">Apellido persona</span>
                                     </label>
-                                    <input th:field="*{lastnames}" type="text" placeholder="Type here" class="input input-bordered w-full" />
+                                    <input th:field="*{lastnames}" type="text" placeholder="Type here"
+                                        class="input input-bordered w-full" />
+                                <p class=" text-red-400" th:if="${#fields.hasErrors('lastnames')}"  th:errors="*{lastnames}"></p>
+                                        
                                 </div>
                             </div>
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text">Email</span>
                                 </label>
-                                <input th:field="*{email}" type="email" placeholder="Type here" class="input input-bordered w-full" />
+                                <input th:field="*{email}" type="email" placeholder="Type here"
+                                    class="input input-bordered w-full" />
+                                <p class=" text-red-400" th:if="${#fields.hasErrors('email')}"  th:errors="*{email}"></p>
+
                             </div>
 
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text">Identificacion</span>
                                 </label>
-                                <input th:field="*{dni}" type="text" placeholder="Type here" class="input input-bordered w-full" />
+                                <input th:field="*{dni}" type="text" placeholder="Type here"
+                                    class="input input-bordered w-full" />
+                                <p class=" text-red-400" th:if="${#fields.hasErrors('dni')}"  th:errors="*{dni}"></p>
+
                             </div>
 
                             <div class="flex flex-wrap pt-2 gap-2">

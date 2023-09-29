@@ -36,14 +36,14 @@ public class ProductDetailService {
 //        return res;
 //    }
 
-    public ProductDetail findByid(long id) {
+    public ProductDetail findByid(Long id) {
 
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id, "id", "productDetail"));
 
     }
 
-//    public Pagination<ProductDetail> findByCategoryId(long id, int page, int size) {
+//    public Pagination<ProductDetail> findByCategoryId(Long id, int page, int size) {
 //
 //        Pageable pageable = PageRequest.of(page, size);
 //
@@ -67,13 +67,13 @@ public class ProductDetailService {
 
     }
 
-    public ProductDetail update(long id, ProductDetail productDetail) {
+    public ProductDetail update(Long id, ProductDetail productDetail) {
         productDetail.setId(id);
 
         return repository.save(productDetail);
     }
 
-    public ProductDetail delete(long id) {
+    public ProductDetail delete(Long id) {
 
         ProductDetail productDetail = findByid(id);
 

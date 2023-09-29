@@ -8,6 +8,8 @@ import anderk222.stock.model.Category;
 import anderk222.stock.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -48,29 +50,36 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public Category findByid(@PathVariable long id) {
+    public Category findByid(@PathVariable Long id) {
 
         return service.findByid(id);
 
     }
 
     @PostMapping
-    public Category save(@RequestBody Category category) {
+    public ResponseEntity<Category> save(@RequestBody Category category) {
 
-        return service.save(category);
+        Category data = service.save(category);
+
+        return ResponseEntity.status(201).body(data);
 
     }
 
     @PutMapping("/{id}")
-    public Category update(@PathVariable long id, Category category) {
+    public ResponseEntity<Category> update(@PathVariable Long id,@RequestBody Category category) {
 
-        return service.update(id, category);
+        Category data = service.update(id, category);
+
+        return ResponseEntity.status(HttpStatus.OK).body(data);
+
     }
 
     @DeleteMapping("/{id}")
-    public Category delete(@PathVariable long id) {
+    public ResponseEntity<Category> delete(@PathVariable Long id) {
 
-        return service.delete(id);
+        Category category = service.delete(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(category);
 
     }
 }

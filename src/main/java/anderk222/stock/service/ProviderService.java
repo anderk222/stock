@@ -42,13 +42,16 @@ public class ProviderService {
 
         Pagination<Provider> res = new Pagination<>(page, size, data.getContent());
 
+        res.setNext(pageable.next().getPageNumber());
+        res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
+        
         res.setTotalPages(data.getTotalPages());
         res.setTotaltems(data.getTotalElements());
 
         return res;
     }
 
-    public Provider findByid(long id) {
+    public Provider findByid(Long id) {
 
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id, "id", "provider"));
@@ -61,7 +64,7 @@ public class ProviderService {
 
     }
 
-    public Provider findByPersonId(long id, int page, int size) {
+    public Provider findByPersonId(Long id, int page, int size) {
         
         Person person =  personService.findByid(id);
         
@@ -86,13 +89,13 @@ public class ProviderService {
 
     }
 
-    public Provider update(long id, Provider provider) {
+    public Provider update(Long id, Provider provider) {
         provider.setId(id);
 
         return repository.save(provider);
     }
 
-    public Provider delete(long id) {
+    public Provider delete(Long id) {
 
         Provider provider = findByid(id);
 

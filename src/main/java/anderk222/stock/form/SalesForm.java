@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 public class SalesForm {
 
-        private long id;
+        private Long id;
         private String invoice;
 
         private PersonForm person;
