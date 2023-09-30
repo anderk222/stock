@@ -27,9 +27,9 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(schema = "public", name="users")
+@Table(schema = "public", name = "users")
 public class User implements UserDetails {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = 0l;
@@ -40,30 +40,32 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column( columnDefinition = "text", nullable = false)
+    @Column(columnDefinition = "text", nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
-    joinColumns = {@JoinColumn(name="user_id", referencedColumnName = "id") },
-    inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "id"))
+    @JoinTable(name = "user_role", joinColumns = {
+            @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
 
-    private List<Role> roles =  new ArrayList<>(); 
+    private List<Role> roles = new ArrayList<>();
 
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
         
-        List<GrantedAuthority> authorities =   new ArrayList<>();
+        authorities.addAll(roles);
 
-        for(Role role : roles){
+        for (Role role : roles) {
 
-        authorities.addAll(role.getAuthorities());
+            authorities.addAll(role.getAuthorities());
 
         }
 
-        if(authorities.isEmpty()) return new ArrayList<>(Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
+        if (authorities.isEmpty())
+            return new ArrayList<>(Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
 
         return authorities;
 
@@ -99,6 +101,6 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public boolean isEnabled() {
-       return true;
+        return true;
     }
 }

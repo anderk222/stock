@@ -27,7 +27,6 @@
                                 <img class="w-96" th:src="${product.img}" />
                             </figure>
 
-
                             <div class="flex flex-col w-full">
 
                                 <h2 class="font-bold text-3xl" th:text="${product.name}">Product Name</h2>
@@ -44,12 +43,10 @@
                                         <input id="ipt-count" class="w-36 bg-slate-50 p-2" type="number"
                                             th:field="*{count}" />
                                     </div>
-                                    <a th:href="@{/product/update/{id}(id=${product.id})}" type="button" class="btn btn-active btn-warning btn-sm">
+                                    <a sec:authorize="hasRole('ROLE_ADMIN')"   th:href="@{/product/update/{id}(id=${product.id})}" type="button" class="btn btn-active btn-warning btn-sm">
                                         Editar
                                     </a>
                                     <button type="submit" class="btn btn-active btn-sm btn-success">
-
-
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
                                             <path

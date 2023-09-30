@@ -8,11 +8,11 @@ import anderk222.stock.exception.ResourceNotFoundException;
 import anderk222.stock.model.Pagination;
 import anderk222.stock.model.Product;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import anderk222.stock.repository.ProductRepository;
@@ -25,11 +25,10 @@ import jakarta.transaction.Transactional;
 @Service
 public class ProductService {
 
-
     @Autowired
     private ProductRepository repository;
 
-
+    // @PreAuthorize("hasAuthority('PRODUCT_READ')")
     public Pagination<Product> search(int page, int size, String value) {
 
         Pageable pageable = PageRequest.of(page, size);
@@ -38,9 +37,9 @@ public class ProductService {
                 .findByNameContainingIgnoreCase(value, pageable);
 
         Pagination<Product> res = new Pagination<>(page, size, data.getContent());
-        
+
         res.setNext(pageable.next().getPageNumber());
-        res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
+        res.setPrevious(pageable.hasPrevious() ? page - 1 : 1);
 
         res.setTotalPages(data.getTotalPages());
         res.setTotaltems(data.getTotalElements());
@@ -48,6 +47,7 @@ public class ProductService {
         return res;
     }
 
+    // @PreAuthorize("hasAuthority('PRODUCT_READ')")
     public Product findByid(Long id) {
 
         return repository.findById(id)
@@ -55,17 +55,18 @@ public class ProductService {
 
     }
 
+    // @PreAuthorize("hasAuthority('PRODUCT_READ')")
     public Pagination<Product> findByProviderId(Long id, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Product> data = repository
-                .findByDetailProviderId(id,pageable);
+                .findByDetailProviderId(id, pageable);
 
         Pagination<Product> res = new Pagination<>(page, size, data.getContent());
 
         res.setNext(pageable.next().getPageNumber());
-        res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
+        res.setPrevious(pageable.hasPrevious() ? page - 1 : 1);
 
         res.setTotalPages(data.getTotalPages());
         res.setTotaltems(data.getTotalElements());
@@ -73,13 +74,14 @@ public class ProductService {
         return res;
 
     }
-    
-        public Pagination<Product> findByCategoryId(Long id, int page, int size) {
+
+    // @PreAuthorize("hasAuthority('PRODUCT_READ')")
+    public Pagination<Product> findByCategoryId(Long id, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Product> data = repository
-                .findByDetailCategoryId(id,pageable);
+                .findByDetailCategoryId(id, pageable);
 
         Pagination<Product> res = new Pagination<>(page, size, data.getContent());
 
@@ -91,6 +93,7 @@ public class ProductService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('PRODUCT_WRITE')")
     public Product save(Product product) {
 
         product.setId(Long.MIN_VALUE);
@@ -99,12 +102,14 @@ public class ProductService {
 
     }
 
+    @PreAuthorize("hasAuthority('PRODUCT_WRITE')")
     public Product update(Long id, Product product) {
         product.setId(id);
 
         return repository.save(product);
     }
 
+    @PreAuthorize("hasAuthority('PRODUCT_WRITE')")
     public Product delete(Long id) {
 
         Product product = findByid(id);
@@ -113,7 +118,5 @@ public class ProductService {
 
         return product;
     }
-
-
 
 }

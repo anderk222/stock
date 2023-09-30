@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,7 +19,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Role {
+public class Role implements GrantedAuthority {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,11 +27,18 @@ public class Role {
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "role_autori",
+    @JoinTable(name = "role_authority",
     joinColumns = @JoinColumn(name="role_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name="authority_id", referencedColumnName = "id")
     )
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Authority> authorities =  new ArrayList<>();
+
+    @Override
+    public String getAuthority() {
+
+        return this.name;
+
+    }
 
 }

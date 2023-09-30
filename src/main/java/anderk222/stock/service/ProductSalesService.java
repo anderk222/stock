@@ -10,6 +10,7 @@ import anderk222.stock.model.Product;
 import anderk222.stock.model.ProductSales;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import anderk222.stock.repository.ProductSalesRepository;
@@ -32,20 +33,8 @@ public class ProductSalesService {
     @Autowired
     ProductService productService;
 
-//    public Pagination<ProductSales> search(int page, int size, String value) {
-//
-//        Pageable pageable = PageRequest.of(page, size);
-//
-//        Page<ProductSales> data = repository
-//                .findByNameContainingIgnoreCase(value, pageable);
-//
-//        Pagination<ProductSales> res = new Pagination(page, size, data.getContent());
-//
-//        res.setTotalPages(data.getTotalPages());
-//        res.setTotaltems(data.getTotalElements());
-//
-//        return res;
-//    }
+
+    @PreAuthorize("hasAuthority('PRODUCT_READ')")
     public ProductSales findByid(Long id) {
 
         return repository.findById(id)
@@ -53,6 +42,7 @@ public class ProductSalesService {
 
     }
 
+    @PreAuthorize("hasAuthority('PRODUCT_READ')")
     public List<ProductSales> findBySaleyId(Long id) {
 
         return repository
@@ -60,6 +50,38 @@ public class ProductSalesService {
 
     }
 
+    // @PreAuthorize("hasAuthority('PRODUCT_READ')")
+    public List<ProductProjection> sellest() {
+
+        List<ProductSales> productSales = repository.findAll();
+
+        List<ProductSales> odered = new ArrayList<>();
+
+        for (ProductSales ps : productSales) {
+
+            int idx = IntStream.range(0, odered.size())
+                    .filter((i) -> odered.get(i).getProduct().getId().equals(ps.getProduct().getId()))
+                    .findFirst().orElse(-1);
+
+            if (idx < 0) {
+                odered.add(ps);
+                continue;
+            }
+
+            ProductSales _found = odered.get(idx);
+
+            _found.setCount(_found.getCount() + ps.getCount());
+        }
+
+        odered.sort(new ProductSalesSortByCount());
+
+        int to_idx = odered.size() > 5 ? 4 : odered.size();
+
+        return odered.subList(0, to_idx).stream().map(ProductProjection::new).toList();
+    }
+    
+
+    @PreAuthorize("hasAuthority('PRODUCT_WRITE')")
     public ProductSales save(ProductSales productSale) {
 
         productSale.setId(Long.MIN_VALUE);
@@ -74,6 +96,7 @@ public class ProductSalesService {
 
     }
 
+    @PreAuthorize("hasAuthority('PRODUCT_WRITE')")
     public ProductSales update(Long id, ProductSales productSale) {
         productSale.setId(id);
 
@@ -95,6 +118,7 @@ public class ProductSalesService {
         return repository.save(productSale);
     }
 
+    @PreAuthorize("hasAuthority('PRODUCT_WRITE')")
     public ProductSales delete(Long id) {
 
         ProductSales productSale = findByid(id);
@@ -105,30 +129,4 @@ public class ProductSalesService {
 
     }
 
-    public List<ProductProjection> sellest(){
-
-        List<ProductSales> productSales = repository.findAll();
-
-        List<ProductSales> odered = new ArrayList<>();
-
-        for( ProductSales ps : productSales ){
-            
-            int idx = IntStream.range(0, odered.size())
-            .filter((i)-> odered.get(i).getProduct().getId().equals(ps.getProduct().getId()))
-            .findFirst().orElse(-1);
-
-            if(idx < 0) {odered.add(ps); continue;}
-            
-            ProductSales _found = odered.get(idx);
-
-            _found.setCount( _found.getCount()+ps.getCount());
-        }
-        
-        odered.sort(new ProductSalesSortByCount());
-
-        int to_idx = odered.size() > 5 ? 4 : odered.size();
-
-
-        return odered.subList(0, to_idx).stream().map(ProductProjection::new).toList();
-    }
 }

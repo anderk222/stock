@@ -1,15 +1,13 @@
 package anderk222.stock.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import anderk222.stock.dto.ProductProjection;
 import anderk222.stock.service.ProductSalesService;
+import anderk222.stock.service.ProductService;
 
 @Controller
 public class MainController {
@@ -17,12 +15,15 @@ public class MainController {
     @Autowired
     ProductSalesService productSalesService;
 
+    @Autowired 
+    private ProductService productService;
+
     @GetMapping()
     public String home(Model model) {
 
-        List<ProductProjection> most_sellest = productSalesService.sellest();
+        model.addAttribute("sellest",  productSalesService.sellest());
 
-        model.addAttribute("sellest", most_sellest);
+        model.addAttribute("others", productService.search(0, 5, ""));
         return "index";
     }
 

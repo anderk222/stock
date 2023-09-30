@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import anderk222.stock.repository.SalesRepository;
@@ -34,28 +35,31 @@ public class SalesService {
 
     @Autowired
     private SalesRepository repository;
-    
-    @Autowired 
+
+    @Autowired
     private ProductService productService;
 
+    @PreAuthorize("hasAuthority('SALES_READ')")
     public Sales findByid(Long id) {
-        
-        Sales sales =repository.findById(id)
+
+        Sales sales = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id, "id", "sale"));
 
         BigDecimal total = BigDecimal.ZERO;
-        
-        for(ProductSales item : sales.getProductSalesList()){
-            
+
+        for (ProductSales item : sales.getProductSalesList()) {
+
             total = total.add(item.getProduct()
                     .getPrice().multiply(BigDecimal.valueOf(item.getCount())));
-            
+
         }
-        
+
         sales.setTotal(total);
-        
+
         return sales;
     }
+
+    @PreAuthorize("hasAuthority('SALES_READ')")
 
     public Pagination<SalesProjection> findByPersonId(Long id, int page, int size) {
 
@@ -67,7 +71,7 @@ public class SalesService {
         Pagination<SalesProjection> res = new Pagination<>(page, size, data.getContent());
 
         res.setNext(pageable.next().getPageNumber());
-        res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
+        res.setPrevious(pageable.hasPrevious() ? page - 1 : 1);
 
         res.setTotalPages(data.getTotalPages());
         res.setTotaltems(data.getTotalElements());
@@ -76,7 +80,8 @@ public class SalesService {
 
     }
 
-    public Sales buy(ShoppingForm shoppingForm){
+    @PreAuthorize("hasAuthority('SALES_READ')")
+    public Sales buy(ShoppingForm shoppingForm) {
 
         Sales sale = repository.save(new Sales());
 
@@ -84,74 +89,76 @@ public class SalesService {
 
         sale.setPerson(new Person(shoppingForm.getPerson()));
 
-
         return repository.save(sale);
     }
 
-    public Sales buy(List<ProductCart> products, Long user){
+    @PreAuthorize("hasAuthority('SALES_READ')")
+    public Sales buy(List<ProductCart> products, Long user) {
 
-       // String uuid = UUID.randomUUID().toString();
+        // String uuid = UUID.randomUUID().toString();
 
         Sales sale = repository.save(new Sales(new Person(user)));
 
-        for(ProductCart pCart : products) sale.addProduct(Product.fromProductCart(pCart), pCart.getCount());
+        for (ProductCart pCart : products)
+            sale.addProduct(Product.fromProductCart(pCart), pCart.getCount());
 
         return repository.save(sale);
-        
 
     }
 
+    @PreAuthorize("hasAuthority('SALES_WRITE')")
     public Sales save(Sales sale) {
 
         sale.setId(Long.MIN_VALUE);
-        
+
         this.updateStock(sale);
 
         return repository.save(sale);
 
     }
-    
-    public List<Sales> saveAll(List<Sales> sales){
-        
+
+    @PreAuthorize("hasAuthority('SALES_WRITE')")
+    public List<Sales> saveAll(List<Sales> sales) {
+
         return repository.saveAll(sales);
-        
+
     }
 
+    @PreAuthorize("hasAuthority('SALES_WRITE')")
     public Sales update(Long id, Sales sale) {
-        
+
         List<ProductSales> old_product_sale = findByid(id).getProductSalesList();
-       
-        for(ProductSales productSales : sale.getProductSalesList()){
-            
-            Optional<ProductSales>  product_old_sale = old_product_sale.stream()
-                    .filter((sp)->sp.getId()==productSales.getId()).findFirst();
-            
+
+        for (ProductSales productSales : sale.getProductSalesList()) {
+
+            Optional<ProductSales> product_old_sale = old_product_sale.stream()
+                    .filter((sp) -> sp.getId() == productSales.getId()).findFirst();
+
             Product product;
             int updated_stock;
 
-            if(product_old_sale.isPresent()){
-                
+            if (product_old_sale.isPresent()) {
+
                 product = product_old_sale.get().getProduct();
-                
-                if((product_old_sale.get().getCount() != productSales.getCount())){
-                    
-                    updated_stock = 
-                            (product.getStock()+ product_old_sale.get().getCount()) - productSales.getCount();
-                
+
+                if ((product_old_sale.get().getCount() != productSales.getCount())) {
+
+                    updated_stock = (product.getStock() + product_old_sale.get().getCount()) - productSales.getCount();
+
                     product.setStock(updated_stock);
-                    
+
                     productService.save(product);
                 }
-            }else{
-                
-                product = productService.findByid(productSales.getProduct().getId());   
+            } else {
+
+                product = productService.findByid(productSales.getProduct().getId());
                 updated_stock = product.getStock() - productSales.getCount();
-                
+
                 product.setStock(updated_stock);
 
                 productService.save(product);
             }
-            
+
         }
 
         return repository.save(sale);
@@ -166,22 +173,21 @@ public class SalesService {
         return sale;
 
     }
-    
-    private void updateStock(Sales sale){
-        
-        
-         for(ProductSales product_sale: sale.getProductSalesList()){
+
+    private void updateStock(Sales sale) {
+
+        for (ProductSales product_sale : sale.getProductSalesList()) {
 
             int count = product_sale.getCount();
             int stock = product_sale.getProduct().getStock();
-            
-            Product _product= productService
+
+            Product _product = productService
                     .findByid(product_sale.getProduct().getId());
-            
+
             _product.setStock(count - stock);
-            
+
             productService.save(_product);
-            
+
         }
     }
 }

@@ -7,10 +7,11 @@
         <li><a th:href="@{/}" >Home</a></li>
         <li><a th:href="@{/product/search}">Products</a></li>
         <li><a th:href="@{/shopping/shop-cart}">Shop car</a></li>
-        <li><a th:href="@{/shopping/purchases/1}" >Purchases</a></li>
-        <li><a th:href="@{/person/search}" >Person</a></li>
-        <li><a th:href="@{/provider/search}" >Provider</a></li>
-        <li><a th:href="@{/category/search}" >Category</a></li>
+        <li sec:authorize="hasRole('ROLE_USER')" >
+          <a th:href="@{/shopping/purchases/{id}(id=${#authentication.principal.id})}" >Purchases</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"  ><a th:href="@{/person/search}" >Person</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')" ><a th:href="@{/provider/search}" >Provider</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"   ><a th:href="@{/category/search}" >Category</a></li>
       </ul>
     </div>
 </div>

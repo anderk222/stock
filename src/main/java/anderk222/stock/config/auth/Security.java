@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,22 +16,30 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class Security {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-              
+                .authorizeHttpRequests(a -> a
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/product/**").permitAll()
+                        .requestMatchers("/shopping/**").permitAll()
+                        .anyRequest().authenticated()
+
+                )
                 .formLogin((fconf) -> fconf
                         .loginPage("/login.html").permitAll()
                         .failureUrl("/login-error.html")
                         .permitAll()
                         .defaultSuccessUrl("/"))
                 .logout(Customizer.withDefaults())
-                .authorizeHttpRequests(a->a
-                .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults());
+
+                .httpBasic(Customizer.withDefaults())
+                .csrf((c) -> c.disable());
+        // .cors(c->c.disable());
 
         return http.build();
     }

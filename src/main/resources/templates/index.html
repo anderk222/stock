@@ -10,25 +10,21 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <th:block th:insert="~{layout/head :: react-cdn}"></th:block>
 </head>
+
 <body>
   <div class="h-screen flex flex-col justify-between">
     <div>
       <div th:replace="~{layout/root :: root}"></div>
       <div class="flex flex-col px-6 gap-3">
-        <div class="carousel h-96 w-full">
+        <div class="carousel w-full h-96">
           <div th:each="product,stat : ${sellest}" th:id="${'item'+stat.index}" class="carousel-item w-full">
-            <img 
-            th:attr="onclick=${'location.href='+'''/product/' + product.id+''''}" 
-            th:src="${product.img}" 
-            class="w-full object-contain cursor-pointer" />
+            <img th:attr="onclick=${'location.href='+'''/product/' + product.id+''''}" th:src="${product.img}"
+              class="w-full object-cover cursor-pointer" />
           </div>
         </div>
         <div class="flex justify-center w-full py-2 gap-2">
-          <a 
-          th:each="product,stat : ${sellest}" 
-          th:href="@{#item{i}(i=${stat.index})}" 
-          th:text="${stat.index+1}" 
-          class="btn btn-xs">1</a>
+          <a th:each="product,stat : ${sellest}" th:href="@{#item{i}(i=${stat.index})}" th:text="${stat.index+1}"
+            class="btn btn-xs">1</a>
         </div>
         <section class="py-2 flex flex-col gap-2">
           <div class="flex flex-col w-full border-opacity-50">
@@ -39,38 +35,37 @@
 
           <section class="flex gap-2 flex-col  ">
             <h2>Mas Vendidos</h2>
+            <p class="text-blue-500" th:if="${sellest.isEmpty()}">No hay nada que mostrar</p>
             <div class="flex flex-wrap gap-4">
-              <div th:each="product : ${sellest}" class="card w-80 bg-base-100 shadow-xl image-full">
-                <figure><img th:src="${product.img}" class="object-cover" alt="Shoes" />
+              <div th:each="product : ${sellest}" class="card w-80 h-56 bg-base-100 shadow-xl image-full">
+                <figure><img th:src="${product.img}" class="object-cover w-full"  alt="Shoes" />
                 </figure>
                 <div class="card-body">
-                  <h2 class="card-title" th:text="${product.name}" >Shoes!</h2>
+                  <h2 class="card-title" th:text="${product.name}">Shoes!</h2>
                   <div class="card-actions justify-end">
                     <a th:href="@{/product/{id}(id=${product.id})}" class="btn btn-primary btn-md">Buy Now</a>
-                  </div> 
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section class="flex gap-2   flex-col">
-            <h2>Otros</h2>
-            <div class="flex flex-wrap gap-2">
-
-              <div class="card w-80 bg-base-100 shadow-xl image-full">
-                <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" />
-                </figure>
-                <div class="card-body">
-                  <h2 class="card-title">Shoes!</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div class="card-actions justify-end">
-                    <button class="btn btn-primary btn-md">Buy Now</button>
                   </div>
                 </div>
               </div>
             </div>
           </section>
 
+          <section class="flex gap-2 flex-col">
+            <h2>Otros</h2>
+            <div class="flex flex-wrap gap-2">
+              <div th:each="product : ${others.data}" class="card w-80 h-56 bg-base-100 shadow-xl image-full">
+                <figure><img th:src="${product.img}" class="w-full" alt="Shoes" />
+                </figure>
+                <div class="card-body">
+                  <h2 th:text="${product.name}" class="card-title">Shoes!</h2>
+                  <!-- <p th:text="${product.detail.detail}" >If a dog chews shoes whose shoes does he choose?</p> -->
+                  <div class="card-actions justify-end">
+                    <a th:href="@{/product/{id}(id=${product.id})}" class="btn btn-primary btn-md">Buy Now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </section>
       </div>
 

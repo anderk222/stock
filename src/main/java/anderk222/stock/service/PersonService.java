@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import anderk222.stock.repository.PersonRepository;
 
@@ -27,59 +28,65 @@ public class PersonService {
 
     @Autowired
     private PersonRepository repository;
-    
-    public Pagination<Person> search(int page, int size,String value){
-        
+
+    @PreAuthorize("hasAuthority('PERSON_READ')")
+    public Pagination<Person> search(int page, int size, String value) {
+
         Pageable pageable = PageRequest.of(page, size);
-        
+
         Page<Person> data = repository
-                .findByNamesContainingIgnoreCase(value,pageable);
-        
+                .findByNamesContainingIgnoreCase(value, pageable);
+
         Pagination<Person> res = new Pagination<>(page, size, data.getContent());
 
         res.setNext(pageable.next().getPageNumber());
-        res.setPrevious(pageable.hasPrevious() ? page-1 : 1 );
-        
+        res.setPrevious(pageable.hasPrevious() ? page - 1 : 1);
+
         res.setTotalPages(data.getTotalPages());
         res.setTotaltems(data.getTotalElements());
-        
+
         return res;
     }
 
-    public List<Person> findAll(){
+    @PreAuthorize("hasAuthority('PERSON_READ')")
+    public List<Person> findAll() {
 
         return repository.findAll();
     }
-    
-    public Person findByid(Long id){
-    
+
+    @PreAuthorize("hasAuthority('PERSON_READ')")
+    public Person findByid(Long id) {
+
         return repository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(id, "id", "person"));
-        
+                .orElseThrow(() -> new ResourceNotFoundException(id, "id", "person"));
+
     }
-    
-    public Person save(Person person){
-        
+
+    @PreAuthorize("hasAuthority('PERSON_WRITE')")
+    public Person save(Person person) {
+
         person.setId(Long.MIN_VALUE);
-        
+
         return repository.save(person);
-        
+
     }
-    
-    public Person update(Long id,Person person){
+
+    @PreAuthorize("hasAuthority('PERSON_WRITE')")
+    public Person update(Long id, Person person) {
         person.setId(id);
-        
+
         return repository.save(person);
     }
-    
-    public Person delete(Long id){
-        
+
+    @PreAuthorize("hasAuthority('PERSON_WRITE')")
+    public Person delete(Long id) {
+
         Person person = findByid(id);
-        
+
         repository.deleteById(id);
-        
+
         return person;
-        
+
     }
-    
+
 }
