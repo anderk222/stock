@@ -27,8 +27,8 @@ public class Security {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/product/**").permitAll()
                         .requestMatchers("/shopping/**").permitAll()
+                        .requestMatchers("/register.html").permitAll()
                         .anyRequest().authenticated()
-
                 )
                 .formLogin((fconf) -> fconf
                         .loginPage("/login.html").permitAll()
